@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "SignUp";
+}
+<head><link rel="stylesheet" href="~/css/black.css"></head>
+<img class="main" src="~/img/bridge.jpg" alt="bridge">
+<div class="center">
+    <h2>Sign up for monthly updates</h2>
+</div>
+<!-- <div class="center"> -->
+<div class="container">
+    <form action="./thankYou.html" target="_self">
+        <div class="row">
+            <div class="col-25">
+                <label for="name">Name</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="name" name="name" placeholder="Your first and last name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="email">Email</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="email" name="email" placeholder="Your email address">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="organization">Organization</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="organization" name="organization" placeholder="What's the name of your organization?">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="industry">Industry</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="industry" name="industry" placeholder="What industry does your organization belong to?">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="purpose">Use Purpose</label>
+            </div>
+            <div class="col-75">
+                <textarea id="purpose" name="purpose" placeholder="Tell us a little bit about your use for this data and any suggestions for the site" style="height:200px"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</div>
+

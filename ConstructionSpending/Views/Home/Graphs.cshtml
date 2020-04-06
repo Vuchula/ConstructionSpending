@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewData["Title"] = "Graphs";
+}
+    <head>
+        <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    </head>
+<div style="padding-top: 50px;text-align: center;
+    background-color: black;
+    color:white;
+    border-radius: 1px;">
+    <h1>Spending over the years</h1>
+</div>
+<div class="main">
+    <div class="content">
+        <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+    </div>
+</div>
+<script type="text/javascript">
+            <!-- https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv -->
+            Plotly.d3.csv("https://raw.githubusercontent.com/gokul1794/assn2-cps/master/csr.csv", function(err, rows){
+
+  function unpack(rows, key) {
+  return rows.map(function(row) { return row[key]; });
+}
+
+
+var trace1 = {
+  type: "scatter",
+  mode: "lines",
+  x: [2019-01-01,2019-02-01,2019-03-01,2019-04-01,2019-05-01,2019-06-01,2019-07-01,2019-08-01,2019-09-01,2019-10-01,2019-11-01,2019-12-01],
+  y: [7126627,7174264,7284680,7370707,7349043,7300719,7341424,7408393,7453633,7471128,7551636,7498797],
+  //x: unpack(rows, 'time_slot_date'),
+  //y: unpack(rows, 'cell_value'),
+  line: {color: '#17BECF'}
+}
+
+/*var trace2 = {
+  type: "scatter",
+  mode: "lines",
+  x: unpack(rows, 'Date'),
+  y: unpack(rows, 'AAPL.Low'),
+  line: {color: '#7F7F7F'}
+}*/
+
+//var data = [trace1,trace2];
+var data = [trace1];
+
+var layout = {
+  title: 'Residential Construction spending over the years (in millions)',
+  xaxis: {
+    range: ['2019-01-01', '2019-31-12'],
+    type: 'date'
+  },
+  yaxis: {
+    autorange: true,
+    //range: [86.8700008333, 138.870004167],
+    type: 'linear'
+  }
+};
+
+Plotly.newPlot('myDiv', data, layout);
+})
+
+</script>
+

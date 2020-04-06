@@ -1,0 +1,37 @@
+  /* menu responsiveness style */
+  ul.menu{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color:white;
+    position: -webkit-sticky;
+    position: sticky;
+    top:0;
+  }
+  ul.menu li {float: left;}
+  
+  ul.menu li.right {
+    float: right;
+  }
+  ul.menu li a {
+    display: block;
+    color:black;
+    padding: 14px 16px;
+    text-align: center;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+  ul.menu li a:hover:not(active) {
+    background-color: black;
+    color: yellow;
+    transition: 0.3s linear;
+  }
+  ul.menu li a.active {background-color:yellow;}
+  /* Responsive layout - makes the menu and the content (inside the section) sit on top of each other instead of next to each other */
+  @media only screen and (max-width:620px) {
+    /* For mobile phones: */
+    ul.menu li.right, ul.menu li{
+      float:none;
+    }
+  }
