@@ -7,8 +7,9 @@ namespace ConstructionSpending.Models
 {
     public class Spending
     {
-        public Time Time { get; set; } //Composite Key needed requires Fluent API
-        public ConstructionType ConstructionType { get; set; } //Composite Key needed requires Fluent API
+        public int SpendingID { get; set; }
+        public Time Time { get; set; } 
+        public ConstructionType ConstructionType { get; set; } 
         public decimal? Value { get; set; }
 
     }

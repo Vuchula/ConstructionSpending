@@ -8,8 +8,9 @@ namespace ConstructionSpending.Models
 {
     public class Vacancy
     {
-        public Time Time { get; set; } //Composite Key needed requires Fluent API
-        public VacancyType VacancyType { get; set; } //Composite Key needed requires Fluent API
+        public int VacancyID { get; set; }
+        public Time Time { get; set; }
+        public VacancyType VacancyType { get; set; }
         public ICollection<Market> Markets { get; set; }
         public decimal? Value { get; set; }
 
@@ -23,8 +24,8 @@ namespace ConstructionSpending.Models
 
     public class Market
     {
-        public int MarketID { get; set; } 
-        public MarketStatus MarketStatus { get; set; } 
+        public int MarketID { get; set; }
+        public MarketStatus MarketStatus { get; set; }
         public MarketType? MarketType { get; set; }
         public bool? On_Contract { get; set; }
         public HeldOffType? HeldOffType { get; set; }

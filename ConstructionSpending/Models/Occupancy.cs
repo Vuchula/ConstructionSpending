@@ -8,8 +8,9 @@ namespace ConstructionSpending.Models
 {
     public class Occupancy
     {
-        public Time Time { get; set; } //Composite Key needed requires Fluent API
-        public OccupancyType OccupancyType { get; set; } //Composite Key needed requires Fluent API
+        public int OccupancyID { get; set; }
+        public Time Time { get; set; }
+        public OccupancyType OccupancyType { get; set; }
         public decimal? Value { get; set; }
     }
 
