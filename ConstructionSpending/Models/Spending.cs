@@ -9,7 +9,7 @@ namespace ConstructionSpending.Models
     {
         public Time Time { get; set; } //Composite Key needed requires Fluent API
         public ConstructionType ConstructionType { get; set; } //Composite Key needed requires Fluent API
-        public float Value { get; set; }
+        public float? Value { get; set; }
 
     }
 
