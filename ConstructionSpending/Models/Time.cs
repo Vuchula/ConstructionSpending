@@ -11,6 +11,10 @@ namespace ConstructionSpending.Models
         public int Year { get; set; }
         public Quarter Quarter { get; set; }
         public Month? Month { get; set; }
+
+        public ICollection<Spending> Spendings { get; set; }
+        public ICollection<Vacancy> Vacancies { get; set; }
+        public ICollection<Occupancy> Occupancies { get; set; }
     }
 
     public enum Quarter
