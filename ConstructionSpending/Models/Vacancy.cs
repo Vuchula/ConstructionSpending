@@ -11,7 +11,7 @@ namespace ConstructionSpending.Models
         public Time Time { get; set; } //Composite Key needed requires Fluent API
         public VacancyType VacancyType { get; set; } //Composite Key needed requires Fluent API
         public ICollection<Market> Markets { get; set; }
-        public float? Value { get; set; }
+        public decimal? Value { get; set; }
 
     }
 
