@@ -10,8 +10,10 @@ namespace ConstructionSpending.Models
     {
         public int VacancyID { get; set; }
         public VacancyType VacancyType { get; set; }
-        public ICollection<Market> Markets { get; set; }
         public decimal? Value { get; set; }
+
+        public int MarketID { get; set; }
+        public Market Market { get; set; }
 
         public int TimeID { get; set; } //declares as not null
         public Time Time { get; set; }
