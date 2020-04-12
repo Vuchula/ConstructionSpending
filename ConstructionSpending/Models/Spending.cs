@@ -7,5 +7,15 @@ namespace ConstructionSpending.Models
 {
     public class Spending
     {
+        public Time Time { get; set; } //Composite Key needed requires Fluent API
+        public ConstructionType ConstructionType { get; set; } //Composite Key needed requires Fluent API
+        public float Value { get; set; }
+
+    }
+
+    public enum ConstructionType
+    {
+        Private,
+        Public
     }
 }
