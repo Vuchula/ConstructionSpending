@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace ConstructionSpending.Models
         public OccupancyType OccupancyType { get; set; }
         public decimal? Value { get; set; }
 
-        public int TimeID { get; set; } //declares as not null
+        [Required]
         public Time Time { get; set; }
     }
 
