@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConstructionSpending.Models
 {
-    public class Users
+    public class User
     {
         public int UserID { get; set; }
         [Required]

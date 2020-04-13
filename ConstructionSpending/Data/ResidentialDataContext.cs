@@ -13,7 +13,7 @@ namespace ConstructionSpending.Data
         public DbSet<Spending> Spendings { get; set; }
         public DbSet<Occupancy> Occupancies { get; set; }
         public DbSet<Vacancy> Vacancies { get; set; }
-        public DbSet<Users> Users { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }
