@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ConstructionSpending.Models;
+using ConstructionSpending.APIHandlerManager;
 
 namespace ConstructionSpending.Controllers
 {
@@ -20,6 +21,8 @@ namespace ConstructionSpending.Controllers
 
         public IActionResult Index()
         {
+            APIHandler api = new APIHandler();
+            api.GetHVData();
             return View();
         }
 
