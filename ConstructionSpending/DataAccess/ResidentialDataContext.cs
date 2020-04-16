@@ -14,6 +14,7 @@ namespace ConstructionSpending.DataAccess
         public DbSet<Occupancy> Occupancies { get; set; }
         public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Response> Responses { get; set; }
 
     }
 }
