@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Razor.Language.Intermediate;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,8 @@ namespace ConstructionSpending.Models
         public int VacancyID { get; set; }
         public VacancyType VacancyType { get; set; }
         public decimal? Value { get; set; }
+        public UnitOfMeasure UoM { get; set; }
+        public bool SeasonallyAdjusted { get; set; }
         [Required]
         public Time Time { get; set; }
 
