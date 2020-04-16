@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ConstructionSpending.Models
 {
-    public class Response
+    public class ResponseVip
     {
-        public int ResponseId { get; set; }
+        public int ResponseVipId { get; set; }
         public string data_type_code { get; set; }
         public double cell_value { get; set; }
         public string program_code { get; set; }
@@ -18,9 +17,5 @@ namespace ConstructionSpending.Models
         public string time_slot_name { get; set; }
         public string category_code { get; set; }
         public string time { get; set; }
-
-
     }
 }
-
-
