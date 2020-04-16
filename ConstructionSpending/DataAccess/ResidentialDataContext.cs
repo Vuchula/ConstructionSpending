@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 
-namespace ConstructionSpending.Data
+namespace ConstructionSpending.DataAccess
 {
     public class ResidentialDataContext : DbContext
     {
