@@ -28,7 +28,7 @@ namespace ConstructionSpending.Controllers
         public IActionResult SaveData()
         {
             //After running for the first time comment this part
-            //Start comment here
+            /*//Start comment here
             HttpClient httpClient;
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -37,10 +37,10 @@ namespace ConstructionSpending.Controllers
                 new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
             APIHandler api = new APIHandler();
-            for(int i = 2000; i < 2020; i++)
+            for (int i = 2000; i < 2020; i++)
             {
                 //Gets the API data year wise starting from 2000
-                List<Response> responses = api.GetData<List<Response>>("hv", i.ToString(),httpClient);
+                List<Response> responses = api.GetData<List<Response>>("hv", i.ToString(), httpClient);
                 //Iterate through each year's response and insert it into the table.
                 foreach (Response response in responses)
                 {
@@ -48,7 +48,7 @@ namespace ConstructionSpending.Controllers
                 }
             }
             dbContext.SaveChanges();
-            //End comment here
+            //End comment here*/
             List<Response> rows = dbContext.Responses.ToList();
             return View(rows);
         }
@@ -66,12 +66,12 @@ namespace ConstructionSpending.Controllers
             APIHandler api = new APIHandler();
             for (int i = 2000; i < 2020; i++)
             {
-                List<ResponseVip> responses = api.GetData<List<ResponseVip>>("vip",i.ToString(), httpClient);
+                List<ResponseVip> responses = api.GetData<List<ResponseVip>>("vip", i.ToString(), httpClient);
                 foreach (ResponseVip response in responses)
                 {
                     dbContext.ResponseVips.Add(response);
                 }
-            }            
+            }
             dbContext.SaveChanges();
             //End comment here
             List<ResponseVip> rows = dbContext.ResponseVips.ToList();
@@ -80,7 +80,7 @@ namespace ConstructionSpending.Controllers
 
         public IActionResult Index()
         {
-           
+
             /*APIHandler api = new APIHandler();
             List<Response> responses = api.GetHVData();
             foreach (Response response in responses)
