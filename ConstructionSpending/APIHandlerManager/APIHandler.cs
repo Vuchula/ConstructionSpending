@@ -1,5 +1,4 @@
 ﻿using ConstructionSpending.DataAccess;
-using ConstructionSpending.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -72,7 +71,7 @@ namespace ConstructionSpending.APIHandlerManager
                         }
                         else
                         {
-                            res.cell_value = (double)-1;
+                            res.cell_value = (double)0;
                         }
                         //res.cell_value = Double.Parse(responseModel[i][1]);
                         res.program_code = responseModel[i][2];
