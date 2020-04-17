@@ -55,7 +55,7 @@ namespace ConstructionSpending.Controllers
 
         public IActionResult SaveVIPData()
         {
-            //After running for the first time comment this part
+            /*//After running for the first time comment this part
             //Start comment here
             HttpClient httpClient;
             httpClient = new HttpClient();
@@ -73,7 +73,7 @@ namespace ConstructionSpending.Controllers
                 }
             }
             dbContext.SaveChanges();
-            //End comment here
+            //End comment here*/
             List<ResponseVip> rows = dbContext.ResponseVips.ToList();
             return View(rows);
         }
