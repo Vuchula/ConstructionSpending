@@ -9,5 +9,10 @@ namespace ConstructionSpending.DataAccess
         public DbSet<Response> Responses { get; set; }
 
         public DbSet<ResponseVip> ResponseVips { get; set; }
+        public DbSet<Time> Times { get; set; }
+        public DbSet<Spending> Spendings { get; set; }
+        public DbSet<Occupancy> Occupancies { get; set; }
+        public DbSet<Vacancy> Vacancies { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
