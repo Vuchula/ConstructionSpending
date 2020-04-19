@@ -92,6 +92,7 @@ namespace ConstructionSpending.APIHandlerManager
                         ResponseVip res = new ResponseVip
                         {
                             data_type_code = responseModel[i][0],
+                            cell_value = double.Parse(responseModel[i][1]),
                             program_code = responseModel[i][2],
                             time_slot_date = DateTime.Parse(responseModel[i][3]),
                             seasonally_adj = responseModel[i][4],
