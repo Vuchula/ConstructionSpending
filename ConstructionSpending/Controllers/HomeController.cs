@@ -10,6 +10,7 @@ using ConstructionSpending.APIHandlerManager;
 using ConstructionSpending.DataAccess;
 using System.Net.Http;
 
+
 namespace ConstructionSpending.Controllers
 {
     public class HomeController : Controller
@@ -28,7 +29,7 @@ namespace ConstructionSpending.Controllers
         public IActionResult SaveData()
         {
             //After running for the first time comment this part
-            //Start comment here
+            /*//Start comment here
             HttpClient httpClient;
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -48,15 +49,15 @@ namespace ConstructionSpending.Controllers
                 }
             }
             dbContext.SaveChanges();
-            //End comment here
-            List<Response> rows = dbContext.Responses.ToList();
+            //End comment here*/
+            IOrderedEnumerable<Response> rows = dbContext.Responses.ToList().OrderBy(r => r.time_slot_date);
             return View(rows);
         }
 
         public IActionResult SaveVIPData()
         {
             //After running for the first time comment this part
-            //Start comment here
+            /*//Start comment here
             HttpClient httpClient;
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -73,10 +74,78 @@ namespace ConstructionSpending.Controllers
                 }
             }
             dbContext.SaveChanges();
-            //End comment here
-            List<ResponseVip> rows = dbContext.ResponseVips.ToList();
+            //End comment here*/
+            IOrderedEnumerable<ResponseVip> rows = dbContext.ResponseVips.ToList().OrderBy(r => r.time_slot_date);
             return View(rows);
         }
+
+        public IActionResult CreateTimeTable()
+        {
+            /*//Start Comment here
+            for (int y = 2000; y < 2020; y++)
+            {
+                int counter = 0;
+                for (int i = 0; i < 16; i++)
+                {
+                    int remainder = i % 4;
+                    int m;
+                    if (remainder == 0)
+                    {
+                        counter++;
+                        m = 0;
+                    }
+                    else
+                    {
+                        m = i - (counter - 1);
+                    };
+                    var time = new Time()
+                    {
+                        Year = y,
+                        Month = (Month)m,
+                        Quarter = (Quarter)counter,
+                    };
+                    dbContext.Add(time);
+                }
+            }
+            dbContext.SaveChanges();
+            //End Comment*/
+            IOrderedEnumerable<Time> times = dbContext.Times.ToList()
+                .OrderBy(time => time.Year)
+                .ThenBy(time => time.Month);
+            return View(times);
+        }
+        
+        /*public IActionResult CleanVIP()
+        {
+            Spending SpendingQuery = dbContext.ResponseVips
+                .Where(r => r.category_code == "00XX" & r.data_type_code == "V")
+                .Select(r => new
+                {
+                    constructiontype = 0,
+                    uom = 3,
+                    season_adj = false,
+                    value = r.cell_value,
+                    time = datetable(r.time_slot_date)
+                });
+            foreach (Spending expense in SpendingQuery)
+            {
+                dbContext.Spendings.Add(expense);
+            }
+            dbContext.SaveChanges();
+
+            return View();
+        }
+
+        Time datetable(DateTime time_slot_date)
+        {
+            Time time = new Time();
+            time.Month = (Month)time_slot_date.Month;
+            time.Year = time_slot_date.Year;
+            //time.Quarter = Quarter;
+            return time;
+
+        }*/
+
 
         public IActionResult Index()
         {
