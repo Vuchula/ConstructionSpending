@@ -9,7 +9,9 @@ using ConstructionSpending.Models;
 using ConstructionSpending.APIHandlerManager;
 using ConstructionSpending.DataAccess;
 using System.Net.Http;
-
+using System.Data.Entity.Core.Objects;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ConstructionSpending.Controllers
 {
@@ -29,7 +31,7 @@ namespace ConstructionSpending.Controllers
         public IActionResult SaveData()
         {
             //After running for the first time comment this part
-            /*//Start comment here
+            //Start comment here
             HttpClient httpClient;
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -49,7 +51,7 @@ namespace ConstructionSpending.Controllers
                 }
             }
             dbContext.SaveChanges();
-            //End comment here*/
+            //End comment here
             IOrderedEnumerable<Response> rows = dbContext.Responses.ToList().OrderBy(r => r.time_slot_date);
             return View(rows);
         }
@@ -57,7 +59,7 @@ namespace ConstructionSpending.Controllers
         public IActionResult SaveVIPData()
         {
             //After running for the first time comment this part
-            /*//Start comment here
+            //Start comment here
             HttpClient httpClient;
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -74,14 +76,14 @@ namespace ConstructionSpending.Controllers
                 }
             }
             dbContext.SaveChanges();
-            //End comment here*/
+            //End comment here
             IOrderedEnumerable<ResponseVip> rows = dbContext.ResponseVips.ToList().OrderBy(r => r.time_slot_date);
             return View(rows);
         }
 
         public IActionResult CreateTimeTable()
         {
-            /*//Start Comment here
+            //Start Comment here
             for (int y = 2000; y < 2020; y++)
             {
                 int counter = 0;
@@ -108,43 +110,113 @@ namespace ConstructionSpending.Controllers
                 }
             }
             dbContext.SaveChanges();
-            //End Comment*/
+            //End Comment
             IOrderedEnumerable<Time> times = dbContext.Times.ToList()
                 .OrderBy(time => time.Year)
                 .ThenBy(time => time.Month);
             return View(times);
         }
-        
-        /*public IActionResult CleanVIP()
-        {
-            Spending SpendingQuery = dbContext.ResponseVips
-                .Where(r => r.category_code == "00XX" & r.data_type_code == "V")
-                .Select(r => new
-                {
-                    constructiontype = 0,
-                    uom = 3,
-                    season_adj = false,
-                    value = r.cell_value,
-                    time = datetable(r.time_slot_date)
-                });
-            foreach (Spending expense in SpendingQuery)
-            {
-                dbContext.Spendings.Add(expense);
-            }
-            dbContext.SaveChanges();
 
-            return View();
+        public IActionResult CleanVIP()
+        {
+            /*//Parameters
+            string residential = "00XX";
+            string resAdjusted = "A00XX"; // if this is present seasonally_adj should be "yes"
+            string privateCons = "V";
+            string publicCons = "P";
+            string totalCons = "T";
+            string monPercPublic = "MPCP";
+            string monPercPrivate = "MPCV"; //not adding "E_" variability of data
+            string monPercTotal = "MPCT";
+
+            //Query
+            IList<ResponseVip> spendingQuery = dbContext.ResponseVips.ToList();
+
+            //filter function selects every record and interprets results
+            Spending filter(ResponseVip expense)
+            {
+                Spending result = new Spending();
+                //check ConstructionType & UoM
+                if (expense.data_type_code == privateCons)
+                {
+                    result.ConstructionType = (ConstructionType)0;
+                    result.UoM = (UnitOfMeasure)2;
+                }
+                else if (expense.data_type_code == publicCons)
+                {
+                    result.ConstructionType = (ConstructionType)1;
+                    result.UoM = (UnitOfMeasure)2;
+                }
+                else if (expense.data_type_code == totalCons)
+                {
+                    result.ConstructionType = (ConstructionType)2;
+                    result.UoM = (UnitOfMeasure)2;
+                }
+                else if (expense.data_type_code == monPercPrivate)
+                {
+                    result.ConstructionType = (ConstructionType)0;
+                    result.UoM = (UnitOfMeasure)0;
+                }
+                else if (expense.data_type_code == monPercPublic)
+                {
+                    result.ConstructionType = (ConstructionType)1;
+                    result.UoM = (UnitOfMeasure)0;
+                }
+                else if (expense.data_type_code == monPercTotal)
+                {
+                    result.ConstructionType = (ConstructionType)2;
+                    result.UoM = (UnitOfMeasure)0;
+                }
+                //Value
+                result.Value = expense.cell_value;
+                //check season adj
+                result.SeasonallyAdjusted = (expense.seasonally_adj == "yes") ? true : false;
+                //Time
+                result.Time = datetable(expense.time_slot_date);
+                return result;
+            };
+
+            foreach (ResponseVip expense in spendingQuery)
+            {
+
+                if ((expense.category_code == residential || expense.category_code == resAdjusted) &&
+                    (expense.data_type_code == publicCons || expense.data_type_code == privateCons || expense.data_type_code == totalCons ||
+                     expense.data_type_code == monPercPublic || expense.data_type_code == monPercPrivate || expense.data_type_code == monPercTotal))
+                {
+                    dbContext.Spendings.Add(filter(expense));
+                }
+            }
+            dbContext.SaveChanges();*/
+
+            IOrderedEnumerable<Spending> expenses = dbContext.Spendings
+                .Include(t => t.Time)
+                .ToList()
+                .OrderBy(e => e.Time.Year)
+                .ThenBy(e => e.Time.Month)
+                .ThenBy(e => e.ConstructionType);
+            return View(expenses);
         }
 
-        Time datetable(DateTime time_slot_date)
+        Time datetable(DateTime date)
         {
-            Time time = new Time();
-            time.Month = (Month)time_slot_date.Month;
-            time.Year = time_slot_date.Year;
-            //time.Quarter = Quarter;
-            return time;
+            Time timeQuery = dbContext.Times
+                .Where(t => (t.Year == date.Year) && (t.Month == (Month)date.Month))
+                .Where(t => t.Quarter == (Quarter)GetQuarter(date)).FirstOrDefault();
+            return timeQuery;
 
-        }*/
+        }
+
+        int GetQuarter(DateTime date)
+        {
+            if (date.Month >= 1 && date.Month <= 3)
+                return 1;
+            else if (date.Month >= 4 && date.Month <= 6)
+                return 2;
+            else if (date.Month >= 7 && date.Month <= 9)
+                return 3;
+            else
+                return 4;
+        }
 
 
         public IActionResult Index()
