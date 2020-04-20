@@ -12,7 +12,7 @@ namespace ConstructionSpending.Models
     {
         public int OccupancyID { get; set; }
         public OccupancyType OccupancyType { get; set; }
-        public decimal? Value { get; set; }
+        public double? Value { get; set; }
         public UnitOfMeasure UoM { get; set; }
         public bool SeasonallyAdjusted { get; set; }
 
@@ -23,6 +23,7 @@ namespace ConstructionSpending.Models
     public enum OccupancyType
     {
         Renter_Occupied,
-        Owner_Occupied
+        Owner_Occupied,
+        Total_Occupied
     }
 }

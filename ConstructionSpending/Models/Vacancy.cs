@@ -12,7 +12,7 @@ namespace ConstructionSpending.Models
     {
         public int VacancyID { get; set; }
         public VacancyType VacancyType { get; set; }
-        public decimal? Value { get; set; }
+        public double? Value { get; set; }
         public UnitOfMeasure UoM { get; set; }
         public bool SeasonallyAdjusted { get; set; }
         [Required]
@@ -25,7 +25,8 @@ namespace ConstructionSpending.Models
     public enum VacancyType
     {
         Year_Round,
-        Seasonal
+        Seasonal,
+        Total_Vacant
     }
 
     public class Market

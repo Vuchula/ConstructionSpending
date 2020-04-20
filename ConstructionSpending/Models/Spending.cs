@@ -10,7 +10,7 @@ namespace ConstructionSpending.Models
     {
         public int SpendingID { get; set; }
         public ConstructionType ConstructionType { get; set; } 
-        public decimal? Value { get; set; }
+        public double? Value { get; set; }
         public UnitOfMeasure UoM { get; set; }
         public bool SeasonallyAdjusted { get; set; }
 
@@ -23,7 +23,8 @@ namespace ConstructionSpending.Models
     public enum ConstructionType
     {
         Private,
-        Public
+        Public,
+        Total
     }
 
     public enum UnitOfMeasure
