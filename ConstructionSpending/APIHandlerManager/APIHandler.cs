@@ -1,5 +1,4 @@
-﻿using ConstructionSpending.Data;
-using ConstructionSpending.Models;
+﻿using ConstructionSpending.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
