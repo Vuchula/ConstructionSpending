@@ -119,7 +119,7 @@ namespace ConstructionSpending.Controllers
 
         public IActionResult CleanVIP()
         {
-            /*//Parameters
+            //Parameters
             string residential = "00XX";
             string resAdjusted = "A00XX"; // if this is present seasonally_adj should be "yes"
             string privateCons = "V";
@@ -176,6 +176,7 @@ namespace ConstructionSpending.Controllers
                 return result;
             };
 
+            //filter & add to database
             foreach (ResponseVip expense in spendingQuery)
             {
 
@@ -186,7 +187,7 @@ namespace ConstructionSpending.Controllers
                     dbContext.Spendings.Add(filter(expense));
                 }
             }
-            dbContext.SaveChanges();*/
+            dbContext.SaveChanges();
 
             IOrderedEnumerable<Spending> expenses = dbContext.Spendings
                 .Include(t => t.Time)
@@ -199,13 +200,30 @@ namespace ConstructionSpending.Controllers
 
         public IActionResult CleanHV()
         {
-            //set parameters
+            //parameters
+            string percentage = "RATE"; //ignoring "E_" Sampling Variability
+            string unit_count = "ESTIMATE";
+            //occupied
+            string homeOwnRate = "HOR";
+            string homeOwnRateAdj = "SAHOR";
+            string ownOccHouses = "OWNOCC";
+            string rentOccHouses = "RNTOCC";
+            string totOcc = "OCC";
+            //vacant 
+            string rentVacRate = "RVR";
+            string ownVacRate = "HVR";
+            string yearlyVac = "YRVAC";
+            string seasonVac = "SEASON";
+            string rentalVac = "RENT";
 
+            string totVacant = "VACANT";
+            //total units
+            string total_units = "TOTAL";
             //query
 
             //create filter function
 
-            //
+            //add to database
             return View();
         }
         Time datetable(DateTime date)
