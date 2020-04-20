@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,8 +19,9 @@ namespace ConstructionSpending.Models
         public bool SeasonallyAdjusted { get; set; }
         [Required]
         public Time Time { get; set; }
-
-        public int MarketID { get; set; } //declares as not null
+        //[AllowNull]
+        //[ForeignKey("Market")]
+        //public int MarketID { get; set; } 
         public Market Market { get; set; }
     }
 
@@ -36,7 +39,7 @@ namespace ConstructionSpending.Models
         public MarketType? MarketType { get; set; }
         public bool? On_Contract { get; set; }
         public HeldOffType? HeldOffType { get; set; }
-
+        [Required]
         public Vacancy Vacancy { get; set; }
     }
 

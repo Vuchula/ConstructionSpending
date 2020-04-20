@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Data.Entity.Core.Objects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Diagnostics.Tracing;
 
 namespace ConstructionSpending.Controllers
 {
@@ -276,6 +277,50 @@ namespace ConstructionSpending.Controllers
         string otherReason = "OTH";
         //total units
         //string total_units = "TOTAL"; //sum of totOccupied & totVacant
+
+        /*public IActionResult CreateMarket()
+        {
+            Market occasionalUse = new Market()
+            {
+                MarketStatus = 0,
+                HeldOffType = 0
+            };
+            Market resideElsewhere = new Market()
+            {
+                MarketStatus = 0,
+                HeldOffType = (HeldOffType)1
+            };
+            Market otherReason = new Market()
+            {
+                MarketStatus = 0,
+                HeldOffType = (HeldOffType)2
+            };
+            Market onContract = new Market()
+            {
+                MarketStatus = (MarketStatus)1,
+                On_Contract = true
+            };
+            Market forRent = new Market()
+            {
+                MarketStatus = (MarketStatus)1,
+                MarketType = 0
+            };
+            Market forSale = new Market()
+            {
+                MarketStatus = (MarketStatus)1,
+                MarketType = (MarketType)1
+            };
+            //add Db
+            dbContext.Add(occasionalUse);
+            dbContext.Add(resideElsewhere);
+            dbContext.Add(otherReason);
+            dbContext.Add(onContract);
+            dbContext.Add(forRent);
+            dbContext.Add(forSale);
+            dbContext.SaveChanges();
+
+            return new EmptyResult();
+        }*/
         public IActionResult CreateOccupy()
         {
             //query
@@ -359,39 +404,45 @@ namespace ConstructionSpending.Controllers
                 // assign market categories
                 if (value.category_code == occasUse || value.data_type_code == resElsewhere || value.data_type_code == otherReason)
                 {
+                    //create new corresponding Market
+                    Market market = new Market();
                     //mark as off-market
-                    result.Market.MarketStatus = 0;
+                    market.MarketStatus = 0;
                     //mark type of held-off
                     if (value.category_code == occasUse)
                     {
-                        result.Market.HeldOffType = 0;
+                        market.HeldOffType = 0;
                     }
                     else if (value.category_code == resElsewhere)
                     {
-                        result.Market.HeldOffType = (HeldOffType)1;
+                        market.HeldOffType = (HeldOffType)1;
                     }
                     else
                     {
-                        result.Market.HeldOffType = (HeldOffType)2;
+                        market.HeldOffType = (HeldOffType)2;
                     }
+                    result.Market = market;
                 }
                 else if (value.category_code == rentalVac || value.category_code == saleVac || value.data_type_code == rentedsoldVac)
                 {
+                    //create new market 
+                    Market market = new Market();
                     //mark as on market
-                    result.Market.MarketStatus = (MarketStatus)1;
+                    market.MarketStatus = (MarketStatus)1;
                     //mark market-type
                     if (value.category_code == rentedsoldVac)
                     {
                         //on contract
-                        result.Market.On_Contract = true;
+                        market.On_Contract = true;
                     }
                     else
                     {
                         //not on contract
-                        result.Market.On_Contract = false;
+                        market.On_Contract = false;
                         //sale or rent market-type
-                        result.Market.MarketType = (value.category_code == saleVac) ? (MarketType)1 : 0;
+                        market.MarketType = (value.category_code == saleVac) ? (MarketType)1 : 0;
                     }
+                    result.Market = market;
                 }
                 //assign value
                 result.Value = value.cell_value;
