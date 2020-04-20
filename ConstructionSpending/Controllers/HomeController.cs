@@ -197,6 +197,17 @@ namespace ConstructionSpending.Controllers
             return View(expenses);
         }
 
+        public IActionResult CleanHV()
+        {
+            //set parameters
+
+            //query
+
+            //create filter function
+
+            //
+            return View();
+        }
         Time datetable(DateTime date)
         {
             Time timeQuery = dbContext.Times
