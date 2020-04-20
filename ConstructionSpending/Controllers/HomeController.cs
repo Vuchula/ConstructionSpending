@@ -117,6 +117,59 @@ namespace ConstructionSpending.Controllers
             return View(times);
         }
 
+        //function to get monthly time(Spending VIP)
+        Time datetable(DateTime date)
+        {
+            Time timeQuery = dbContext.Times
+                .Where(t => (t.Year == date.Year) && (t.Month == (Month)date.Month))
+                .Where(t => t.Quarter == (Quarter)GetQuarter(date)).FirstOrDefault();
+            return timeQuery;
+
+        }
+
+        //function to get quarters (Spending VIP)
+        int GetQuarter(DateTime date)
+        {
+            if (date.Month >= 1 && date.Month <= 3)
+                return 1;
+            else if (date.Month >= 4 && date.Month <= 6)
+                return 2;
+            else if (date.Month >= 7 && date.Month <= 9)
+                return 3;
+            else
+                return 4;
+        }
+        //function to get quarterly time (HV Occup & Vac)
+        Time hvDatetable(DateTime date, string quarter)
+        {
+            Time quarterQuery = dbContext.Times
+                .Where(t => (t.Year == date.Year) && t.Quarter == (Quarter)hvGetQuarter(quarter))
+                .Where(t => t.Month == 0)
+                .FirstOrDefault();
+            return quarterQuery;
+        }
+
+        //function to identify quarter time (HV Occup & Vac)
+        int hvGetQuarter(string quarter)
+        {
+            if (quarter.ToLower().Contains("q1"))
+            {
+                return 1;
+            }
+            else if (quarter.ToLower().Contains("q2"))
+            {
+                return 2;
+            }
+            else if (quarter.ToLower().Contains("q3"))
+            {
+                return 3;
+            }
+            else
+            {
+                return 4;
+            }
+        }
+
         public IActionResult CleanVIP()
         {
             //Parameters
@@ -198,56 +251,179 @@ namespace ConstructionSpending.Controllers
             return View(expenses);
         }
 
-        public IActionResult CleanHV()
+        //parameters HV data in Response
+        //string percentage = "RATE"; //ignoring "E_" Sampling Variability
+        string unit_count = "ESTIMATE";
+        //occupied
+        string homeOwnRate = "HOR";
+        string homeOwnRateAdj = "SAHOR";
+        string ownOccHouses = "OWNOCC";
+        string rentOccHouses = "RNTOCC";
+        string totOccupied = "OCC";
+        //vacant 
+        string rentVacRate = "RVR";
+        string ownVacRate = "HVR";
+        string totVacant = "VACANT";
+        string yearlyVac = "YRVAC";
+        string seasonVac = "SEASON";
+        string rentalVac = "RENT";
+        string saleVac = "SALE";
+        string rentedsoldVac = "RNTSLD";
+        //off-market
+        //string totOffMarket = "OFFMAR"; // sum of occasUse, resElsewhere, otherReason
+        string occasUse = "OCCUSE";
+        string resElsewhere = "URE";
+        string otherReason = "OTH";
+        //total units
+        //string total_units = "TOTAL"; //sum of totOccupied & totVacant
+        public IActionResult CreateOccupy()
         {
-            //parameters
-            string percentage = "RATE"; //ignoring "E_" Sampling Variability
-            string unit_count = "ESTIMATE";
-            //occupied
-            string homeOwnRate = "HOR";
-            string homeOwnRateAdj = "SAHOR";
-            string ownOccHouses = "OWNOCC";
-            string rentOccHouses = "RNTOCC";
-            string totOcc = "OCC";
-            //vacant 
-            string rentVacRate = "RVR";
-            string ownVacRate = "HVR";
-            string yearlyVac = "YRVAC";
-            string seasonVac = "SEASON";
-            string rentalVac = "RENT";
-
-            string totVacant = "VACANT";
-            //total units
-            string total_units = "TOTAL";
             //query
+            IList<Response> housesQuery = dbContext.Responses.ToList();
 
-            //create filter function
+            //create classification function
+            Occupancy occupiedFilter(Response value)
+            {
+                Occupancy result = new Occupancy();
+                //checking season_adjusted
+                result.SeasonallyAdjusted = value.seasonally_adj == "yes" ? true : false;
+                //UoM for rates & house units
+                result.UoM = (value.category_code == unit_count) ? (UnitOfMeasure)1 : 0;
+                //check occupancy type 
+                if (value.data_type_code == ownOccHouses || value.data_type_code == homeOwnRate || value.data_type_code == homeOwnRateAdj)
+                {
+                    result.OccupancyType = (OccupancyType)1;
+                }
+                else if (value.data_type_code == rentOccHouses)
+                {
+                    result.OccupancyType = 0;
+                }
+                else
+                {
+                    result.OccupancyType = (OccupancyType)2;
+                }
+                //assign value
+                result.Value = value.cell_value;
+                //assign correct time (quarterly nums only)
+                result.Time = hvDatetable(value.time_slot_date, value.time);
+                return result;
+            }
 
             //add to database
-            return View();
+            foreach (Response value in housesQuery)
+            {
+                //US-level Occupied add to db
+                if ((value.geo_level_code == "US") && (value.data_type_code == homeOwnRate || value.data_type_code == homeOwnRateAdj ||
+                    value.data_type_code == ownOccHouses || value.data_type_code == rentOccHouses ||
+                    value.data_type_code == totOccupied))
+                {
+                    dbContext.Occupancies.Add(occupiedFilter(value));
+                }
+            }
+            //Save results
+            dbContext.SaveChanges();
+            //Create list for db
+            IOrderedEnumerable<Occupancy> occupancies = dbContext.Occupancies.Include(t => t.Time)
+                .ToList()
+                .OrderBy(o => o.Time.Year)
+                .ThenBy(o => o.Time.Quarter);
+
+            return View(occupancies);
         }
-        Time datetable(DateTime date)
+        public IActionResult CreateVacancy()
         {
-            Time timeQuery = dbContext.Times
-                .Where(t => (t.Year == date.Year) && (t.Month == (Month)date.Month))
-                .Where(t => t.Quarter == (Quarter)GetQuarter(date)).FirstOrDefault();
-            return timeQuery;
+            //query
+            IList<Response> housesQuery = dbContext.Responses.ToList();
 
+            //create classification function
+            Vacancy vacancyFilter(Response value)
+            {
+                Vacancy result = new Vacancy();
+                //check season_adj
+                result.SeasonallyAdjusted = (value.seasonally_adj == "yes") ? true : false;
+                //check UoM
+                result.UoM = (value.category_code == unit_count) ? (UnitOfMeasure)1 : 0;
+                //check vacancy type
+                if (value.category_code == totVacant)
+                {
+                    result.VacancyType = (VacancyType)2;
+                }
+                else if (value.category_code == seasonVac)
+                {
+                    result.VacancyType = (VacancyType)1;
+                }
+                else
+                {
+                    result.VacancyType = 0;
+                }
+                // assign market categories
+                if (value.category_code == occasUse || value.data_type_code == resElsewhere || value.data_type_code == otherReason)
+                {
+                    //mark as off-market
+                    result.Market.MarketStatus = 0;
+                    //mark type of held-off
+                    if (value.category_code == occasUse)
+                    {
+                        result.Market.HeldOffType = 0;
+                    }
+                    else if (value.category_code == resElsewhere)
+                    {
+                        result.Market.HeldOffType = (HeldOffType)1;
+                    }
+                    else
+                    {
+                        result.Market.HeldOffType = (HeldOffType)2;
+                    }
+                }
+                else if (value.category_code == rentalVac || value.category_code == saleVac || value.data_type_code == rentedsoldVac)
+                {
+                    //mark as on market
+                    result.Market.MarketStatus = (MarketStatus)1;
+                    //mark market-type
+                    if (value.category_code == rentedsoldVac)
+                    {
+                        //on contract
+                        result.Market.On_Contract = true;
+                    }
+                    else
+                    {
+                        //not on contract
+                        result.Market.On_Contract = false;
+                        //sale or rent market-type
+                        result.Market.MarketType = (value.category_code == saleVac) ? (MarketType)1 : 0;
+                    }
+                }
+                //assign value
+                result.Value = value.cell_value;
+                //assign time
+                result.Time = hvDatetable(value.time_slot_date, value.time);
+                return result;
+            }
+
+            //add to database
+            foreach (Response value in housesQuery)
+            {
+                //US-level Vacant add to db
+                if ((value.geo_level_code == "US") && (value.data_type_code == rentVacRate || value.data_type_code == ownVacRate ||
+                    value.data_type_code == totVacant || value.data_type_code == yearlyVac ||
+                    value.data_type_code == seasonVac || value.data_type_code == rentalVac ||
+                    value.data_type_code == saleVac || value.data_type_code == rentedsoldVac ||
+                    value.data_type_code == occasUse || value.data_type_code == resElsewhere ||
+                    value.data_type_code == otherReason))
+                {
+                    dbContext.Vacancies.Add(vacancyFilter(value));
+                }
+            }
+            //Save results
+            dbContext.SaveChanges();
+            //Create list for db
+            IOrderedEnumerable<Vacancy> vacancies = dbContext.Vacancies.Include(t => t.Time)
+                .ToList()
+                .OrderBy(v => v.Time.Year)
+                .ThenBy(v => v.Time.Quarter);
+
+            return View(vacancies);
         }
-
-        int GetQuarter(DateTime date)
-        {
-            if (date.Month >= 1 && date.Month <= 3)
-                return 1;
-            else if (date.Month >= 4 && date.Month <= 6)
-                return 2;
-            else if (date.Month >= 7 && date.Month <= 9)
-                return 3;
-            else
-                return 4;
-        }
-
-
         public IActionResult Index()
         {
 
