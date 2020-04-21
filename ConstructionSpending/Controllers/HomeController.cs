@@ -462,7 +462,7 @@ namespace ConstructionSpending.Controllers
             {
                 //US-level Vacant add to db
                 if ((value.geo_level_code == "US") && (value.data_type_code == rentVacRate || value.data_type_code == ownVacRate ||
-                    value.data_type_code == totVacant || value.data_type_code == yearlyVac ||
+                    value.data_type_code == totVacant || //value.data_type_code == yearlyVac ||
                     value.data_type_code == seasonVac || value.data_type_code == rentalVac ||
                     value.data_type_code == saleVac || value.data_type_code == rentedsoldVac ||
                     value.data_type_code == occasUse || value.data_type_code == resElsewhere ||
