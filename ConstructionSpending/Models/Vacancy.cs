@@ -19,9 +19,9 @@ namespace ConstructionSpending.Models
         public bool SeasonallyAdjusted { get; set; }
         [Required]
         public Time Time { get; set; }
-        //[AllowNull]
+        
         //[ForeignKey("Market")]
-        //public int MarketID { get; set; } 
+        public int? MarketID { get; set; } 
         public Market Market { get; set; }
     }
 

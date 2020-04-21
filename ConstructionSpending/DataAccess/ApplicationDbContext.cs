@@ -12,7 +12,7 @@ namespace ConstructionSpending.DataAccess
             modelBuilder.Entity<Vacancy>()
                 .HasOne<Market>(v => v.Market)
                 .WithOne(m => m.Vacancy)
-                .HasForeignKey<Market>(m => m.MarketID)
+                .HasForeignKey<Vacancy>(m => m.MarketID)
                 .IsRequired(false);
         }
 
@@ -25,5 +25,6 @@ namespace ConstructionSpending.DataAccess
         public DbSet<Occupancy> Occupancies { get; set; }
         public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Market> Markets { get; set; }
     }
 }
