@@ -494,9 +494,27 @@ namespace ConstructionSpending.Controllers
             return View();
         }
 
-        public IActionResult Reports()
+        public IActionResult Reports(int year1, int year2)
         {
-            return View();
+            
+            var YearLst = new List<string>();
+            IQueryable<int> YearQry = from m in dbContext.Times
+                                            orderby m.Year
+                                            select m.Year;
+
+            var data = from d in dbContext.Times
+                         select d;
+
+            
+                data = data.Where(s => s.Year==year1);
+                data = data.Where(q => q.Year == year2);
+            
+            
+
+
+          
+            
+            return View(data);
         }
 
         public IActionResult Graphs()
