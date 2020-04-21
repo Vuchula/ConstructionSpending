@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Razor.Language.Intermediate;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,18 +14,22 @@ namespace ConstructionSpending.Models
     {
         public int VacancyID { get; set; }
         public VacancyType VacancyType { get; set; }
-        public decimal? Value { get; set; }
+        public double? Value { get; set; }
+        public UnitOfMeasure UoM { get; set; }
+        public bool SeasonallyAdjusted { get; set; }
         [Required]
         public Time Time { get; set; }
-
-        public int MarketID { get; set; } //declares as not null
+        
+        //[ForeignKey("Market")]
+        public int? MarketID { get; set; } 
         public Market Market { get; set; }
     }
 
     public enum VacancyType
     {
         Year_Round,
-        Seasonal
+        Seasonal,
+        Total_Vacant
     }
 
     public class Market
@@ -32,7 +39,7 @@ namespace ConstructionSpending.Models
         public MarketType? MarketType { get; set; }
         public bool? On_Contract { get; set; }
         public HeldOffType? HeldOffType { get; set; }
-
+        [Required]
         public Vacancy Vacancy { get; set; }
     }
 

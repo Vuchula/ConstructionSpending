@@ -1,4 +1,4 @@
-﻿using ConstructionSpending.Models;
+﻿using ConstructionSpending.DataAccess;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace ConstructionSpending.APIHandlerManager
         public T GetData<T>(string type, string year, HttpClient httpClient)
         {
             String API = BASE_URL + type+"?get=data_type_code,cell_value,program_code,time_slot_date," +
-                "seasonally_adj,time_slot_id,time_slot_name,category_code" +
+                "seasonally_adj,time_slot_id,time_slot_name,category_code,geo_level_code" +
                 "&time="+year+"&key=" + API_KEY;
             String data = "";
             List<List<String>> responseModel;
@@ -71,7 +71,7 @@ namespace ConstructionSpending.APIHandlerManager
                         }
                         else
                         {
-                            res.cell_value = (double)-1;
+                            res.cell_value = (double)0;
                         }
                         //res.cell_value = Double.Parse(responseModel[i][1]);
                         res.program_code = responseModel[i][2];
@@ -80,7 +80,8 @@ namespace ConstructionSpending.APIHandlerManager
                         res.time_slot_id = int.Parse(responseModel[i][5]);
                         res.time_slot_name = responseModel[i][6];
                         res.category_code = responseModel[i][7];
-                        res.time = responseModel[i][8];
+                        res.time = responseModel[i][9];
+                        res.geo_level_code = responseModel[i][8];
 
                         dataResponse.Add(res);
                     }
@@ -92,6 +93,7 @@ namespace ConstructionSpending.APIHandlerManager
                         ResponseVip res = new ResponseVip
                         {
                             data_type_code = responseModel[i][0],
+                            cell_value = double.Parse(responseModel[i][1]),
                             program_code = responseModel[i][2],
                             time_slot_date = DateTime.Parse(responseModel[i][3]),
                             seasonally_adj = responseModel[i][4],

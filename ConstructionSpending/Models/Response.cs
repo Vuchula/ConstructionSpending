@@ -18,6 +18,7 @@ namespace ConstructionSpending.Models
         public string time_slot_name { get; set; }
         public string category_code { get; set; }
         public string time { get; set; }
+        public string geo_level_code { get; set; }
 
 
     }
