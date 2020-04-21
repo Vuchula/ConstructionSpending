@@ -494,26 +494,26 @@ namespace ConstructionSpending.Controllers
             return View();
         }
 
-        public IActionResult Reports(int year1, int year2)
+        public IActionResult Reports(int? year1, int? year2)
         {
-            
-            var YearLst = new List<string>();
+
+            /*var YearLst = new List<string>();
             IQueryable<int> YearQry = from m in dbContext.Times
                                             orderby m.Year
-                                            select m.Year;
+                                            select m.Year;*/
 
-            var data = from d in dbContext.Times
-                         select d;
-
-            
-                data = data.Where(s => s.Year==year1);
-                data = data.Where(q => q.Year == year2);
-            
-            
+            IList<Time> data = dbContext.Times.ToList();
 
 
-          
-            
+            data = data.Where(x => (x.Year == year1) || x.Year == year2).ToList();
+
+
+            //data = data.Where(x => x.Year.ToString().Contains(year2.ToString())).ToList();
+
+
+
+
+
             return View(data);
         }
 

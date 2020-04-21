@@ -1,5 +1,4 @@
-﻿@model ConstructionSpending.Models.Time
-@{
+﻿@{
     ViewData["Title"] = "Reports";
 }
 <head>
@@ -33,13 +32,9 @@
         <form asp-controller="Home" asp-action="Reports" method="get">
             <p>
 
-                <select asp-route-id ="year1" asp-items="Model.Times">
-                    <option value="">All</option>
-                </select>
+                @Html.TextBox("year1")<input type="submit" value="Search" />
+                @Html.TextBox("year2")<input type="submit" value="Search" />
 
-                <select asp-route-id="year2" asp-items="Model.Times">
-                    <option value="">All</option>
-                </select>
                 <input type="submit" value="Filter" />
             </p>
         </form>
