@@ -265,7 +265,7 @@ namespace ConstructionSpending.Controllers
         string rentVacRate = "RVR";
         string ownVacRate = "HVR";
         string totVacant = "VACANT";
-        string yearlyVac = "YRVAC";
+        //string yearlyVac = "YRVAC";
         string seasonVac = "SEASON";
         string rentalVac = "RENT";
         string saleVac = "SALE";
@@ -425,7 +425,8 @@ namespace ConstructionSpending.Controllers
                         dbContext.SaveChanges();
                         result.Market = market;
                     }
-                    else if (value.data_type_code == rentalVac || value.data_type_code == saleVac || value.data_type_code == rentedsoldVac)
+                    else if (value.data_type_code == rentalVac || value.data_type_code == saleVac || value.data_type_code == rentedsoldVac
+                          || value.data_type_code == rentVacRate || value.data_type_code == ownVacRate)
                     {
                         //create new market 
                         Market market = new Market();
@@ -442,7 +443,7 @@ namespace ConstructionSpending.Controllers
                             //not on contract
                             market.On_Contract = false;
                             //sale or rent market-type
-                            market.MarketType = (value.category_code == saleVac) ? (MarketType)1 : 0;
+                            market.MarketType = (value.category_code == saleVac || value.category_code == ownVacRate) ? (MarketType)1 : 0;
                         }
                         dbContext.Markets.Add(market);
                         dbContext.SaveChanges();
