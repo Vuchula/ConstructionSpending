@@ -37,6 +37,12 @@ namespace ConstructionSpending.Controllers
             IEnumerable<Vacancy> vacancies = dbContext.Vacancies.ToList();
             IEnumerable<Occupancy> occupancies = dbContext.Occupancies.ToList();
 
+            //simple date range
+            var simpleRange = dbContext.Times
+                .Where(time => time.Year >= startYear && time.Year <= endYear)
+                .OrderBy(time => time.Year).ThenBy(time => time.Quarter).ThenBy(time => time.Month)
+                .ToList();
+
             //query of time range
             var timeRange = dbContext.Times
                 .Where(time => time.Year >= startYear && time.Year <= endYear)
@@ -45,12 +51,12 @@ namespace ConstructionSpending.Controllers
                 .Select(time => new { time.Year, time.Quarter, time.Occupancies, time.Vacancies })
                 .ToList();
 
-            foreach (var quarter in timeRange)
+            foreach (var quarter in simpleRange)
             {
-                Console.WriteLine("Year: {0} Quarter: {1}, Occu: {2}, Vac: {3}", quarter.Year, quarter.Quarter
-                    , quarter.Occupancies, quarter.Vacancies);
+                Console.WriteLine("{0}, {1}, {2}", quarter.Year, quarter.Quarter, quarter.Month);
+                //Console.WriteLine("Year: {0} Quarter: {1}, Occu: {2}, Vac: {3}", quarter.Year, quarter.Quarter
+                    //, quarter.Occupancies, quarter.Vacancies);
             }
-
 
             return new EmptyResult();
         }
