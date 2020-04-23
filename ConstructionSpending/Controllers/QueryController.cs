@@ -33,7 +33,7 @@ namespace ConstructionSpending.Controllers
 
             foreach (var quarter in yearlySpending)
             {
-                Console.WriteLine("Quarter: {0}, Sum: {1}", quarter.Quarter, quarter.Sum);
+                Console.WriteLine("Quarter: {0}, Sum: {1}", quarter.Quarter + 1, quarter.Sum);
             }
 
             return new EmptyResult();
