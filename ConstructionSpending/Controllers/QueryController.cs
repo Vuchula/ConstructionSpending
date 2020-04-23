@@ -40,6 +40,7 @@ namespace ConstructionSpending.Controllers
             //query of time range
             var timeRange = dbContext.Times
                 .Where(time => time.Year >= startYear && time.Year <= endYear)
+                .OrderBy(time => time.Year).ThenBy(time => time.Quarter)
                 .Include(occup => occup.Occupancies)
                 .Select(time => new { time.Year, time.Quarter, time.Occupancies, time.Vacancies })
                 .ToList();
