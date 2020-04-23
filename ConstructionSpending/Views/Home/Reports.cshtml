@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Reports";
 }
 <head>
@@ -19,43 +20,47 @@
 
         Residential Construction spending by year(Millions of dollars)
         <!-- <select name="choice">
-    <option value="first">2012</option>
-    <option value="second">2013</option>
-    <option value="third">2014</option>
-    <option value="fourth">2015</option>
-    <option value="fifth">2016</option>
-    <option value="sixth">2017</option>
-    <option value="seventh">2018</option>
-    <option value="eigth">2019</option>
-    <option value="ninth">2020</option>
-    </select> -->
+        <option value="first">2012</option>
+        <option value="second">2013</option>
+        <option value="third">2014</option>
+        <option value="fourth">2015</option>
+        <option value="fifth">2016</option>
+        <option value="sixth">2017</option>
+        <option value="seventh">2018</option>
+        <option value="eigth">2019</option>
+        <option value="ninth">2020</option>
+        </select> -->
         <form asp-controller="Home" asp-action="Reports" method="get">
             <p>
 
                 @Html.TextBox("year1")<input type="submit" value="Search" />
                 @Html.TextBox("year2")<input type="submit" value="Search" />
 
-                <input type="submit" value="Filter" />
+                
             </p>
+
+
         </form>
         <table>
-        <tbody>
-            @foreach (var item in Model)
-            {
+            <tbody>
+                @foreach (var item in Model)
+                {
                 <tr>
                     <td>
-                        @item.Year
+                        @item.Time.Year
                     </td>
                     <td>
-                        @item.Quarter
+                        @item.Time.Month
                     </td>
                     <td>
-                        @item.Month
+                        @item.Time.Quarter
                     </td>
-                    
+                    <td>
+                        @item.Value
+                    </td>
                 </tr>
-            }
-        </tbody>
+                }
+            </tbody>
         </table>
     </div>
 </div>

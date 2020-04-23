@@ -3,4 +3,21 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<table>
+<tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.Time.Year
+            </td>
+            <td>
+                @item.Time.Month
+            </td>
+            <td>
+                @item.Value
+            </td>
+        </tr>
+    }
+</tbody>
+</table>

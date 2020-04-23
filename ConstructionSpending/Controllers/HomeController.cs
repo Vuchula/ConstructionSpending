@@ -496,25 +496,54 @@ namespace ConstructionSpending.Controllers
 
         public IActionResult Reports(int? year1, int? year2)
         {
+            
+              List<Occupancy> query  = dbContext.Occupancies.Where(p => (p.Time.Year >= year1 && p.Time.Year<= year2)).Include(p => p.Time).ToList();
+            
 
-            /*var YearLst = new List<string>();
-            IQueryable<int> YearQry = from m in dbContext.Times
-                                            orderby m.Year
-                                            select m.Year;*/
+            foreach (var q in query)
+            {
+                if (q.UoM == UnitOfMeasure.in_Percentage)
+                {
 
-            IList<Time> data = dbContext.Times.ToList();
+                    q.Value = q.Value * 1000;
+                }
+            }
 
+            return View(query);
+            /*var join = from c in data
+                       join
+                       p in dbContext.Occupancies
+                       on c.TimeID equals p.Time.TimeID
+                       select new
+                       {
+                           Year_name = c.Year,
+                           month_name = c.Month,
+                           price = p.Value
 
-            data = data.Where(x => (x.Year == year1) || x.Year == year2).ToList();
+                       };*/
+            /*var occupancyJoin = dbContext.Occupancies
+            .Join(data,
+             o => o.Time.TimeID,
+             t => t.TimeID,
+             (o, t) => new
+             {
+                 Price = o.Value,
+                 Y = o.Time.Year,
+                 Q = o.Time.Quarter
 
-
+             }).ToList();*/
             //data = data.Where(x => x.Year.ToString().Contains(year2.ToString())).ToList();
 
+            /* var qry = from c in dbContext.Times
+                       join p in dbContext.Occupancies
+                       on c.TimeID equals p.Time.TimeID
+                       into joino
+                       select joino*/
+            /*.ToList();*/
 
 
 
-
-            return View(data);
+           // return View(data);
         }
 
         public IActionResult Graphs()
@@ -534,7 +563,52 @@ namespace ConstructionSpending.Controllers
 
         public IActionResult ThankYou()
         {
+            //List<Occupancy> query = dbContext.Occupancies.Where(p => p.Time.Year == 2003).Include(p => p.Time).ToList();
+             /*List<Time> times = dbContext.Times.ToList();
+             List<Occupancy> occupancies = dbContext.Occupancies.ToList();
+            List<Spending> spendings = dbContext.Spendings.ToList();*/
+            //List<Vacancy> vacancies = dbContext.Vacancies.ToList();
+
+            /*var join = from c in times
+                       join
+                       p in occupancies
+                       on c.TimeID equals p.Time.TimeID into table1
+                       from p in table1.ToList()
+                           *//* join
+                            s in spendings
+                            on p.Time.TimeID equals s.Time.TimeID into table2
+                            from s in table2.ToList()*/
+                           /* join
+                            v in vacancies
+                            on s.Time.TimeID equals v.Time.TimeID into table3
+                            from v in table3.ToList()*//*
+                       select new timesOccupation
+                       {
+                           Time = c,
+                           Occupancy = p,
+                           //Spending = s,
+                           //Vacancy = v
+
+                       };*/
+
+             /*var join = from q in times
+                       join
+                       v in vacancies
+                       on q.TimeID equals v.Time.TimeID into table2
+                       from v in table2.ToList()
+                       select new timesOccupation
+                       {
+                           Time = q,
+                           //Occupancy = p,
+                           //Spending = s
+                           Vacancy = v
+
+                       };*/
+
+
+
             return View();
+
         }
         public IActionResult Privacy()
         {

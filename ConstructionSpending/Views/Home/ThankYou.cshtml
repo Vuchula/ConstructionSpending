@@ -1,13 +1,36 @@
-﻿
+﻿@model IEnumerable<ConstructionSpending.Models.timesOccupation>
 @{
     ViewData["Title"] = "ThankYou";
 }
+
+
 
 <div style="padding-top: 50px;text-align: center;
     background-color: black;
     color:white;
     border-radius: 1px;">
     <h3>You are all signed up!</h3>
+
+    <table>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @item.Time.Year
+                </td>
+                <td>
+                    @item.Time.Month
+                </td>
+                <td>
+                    @item.Vacancy.Value
+                </td>
+                
+
+            </tr>
+            }
+        </tbody>
+    </table>
     <h3>Thank you.</h3>
 </div>
 <img class="main" src="img/thankYou.jpg" alt="Shaking hands">
