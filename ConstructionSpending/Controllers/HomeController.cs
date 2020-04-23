@@ -1,18 +1,15 @@
-﻿using System;
+﻿using ConstructionSpending.APIHandlerManager;
+using ConstructionSpending.DataAccess;
+using ConstructionSpending.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ConstructionSpending.Models;
-using ConstructionSpending.APIHandlerManager;
-using ConstructionSpending.DataAccess;
 using System.Net.Http;
-using System.Data.Entity.Core.Objects;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Diagnostics.Tracing;
 
 namespace ConstructionSpending.Controllers
 {
@@ -450,7 +447,7 @@ namespace ConstructionSpending.Controllers
                         result.Market = market;
                     }
                 }
-                
+
                 //assign value
                 result.Value = value.cell_value;
                 //assign time
@@ -495,10 +492,26 @@ namespace ConstructionSpending.Controllers
             return View();
         }
 
-        public IActionResult Reports()
+        public IActionResult Reports(String year, String category)
         {
-            return View();
+            if (year != null && category != null)
+            {
+                Console.WriteLine("Year from View " + year + " Category selected " + category);
+                //equities = GetChart(symbol);
+                //equities = equities.OrderBy(c => c.date).ToList(); //Make sure the data is in ascending order of date.
+            }
+            dynamic mymodel = new ExpandoObject();
+            IList<int> time = dbContext.Times.Select(p => p.Year).Distinct().ToList();
+            mymodel.Year = time;
+            List<String> categories = new List<string>() { "Vaccancy", "Occupancy", "Spending", "Market" };
+            mymodel.Category = categories;
+            return View(mymodel);
         }
+
+        /*public IActionResult GetTable(string year, string category)
+        {
+            return Content();
+        }*/
 
         public IActionResult Graphs()
         {
