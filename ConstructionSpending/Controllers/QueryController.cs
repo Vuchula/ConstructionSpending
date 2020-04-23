@@ -60,20 +60,24 @@ namespace ConstructionSpending.Controllers
 
             return new EmptyResult();
         }
-        public IActionResult SpendingToQuarter()
+        public IActionResult SpendToQuarter()
         {
-            //query to group values by quarter
+            for (int year = 2002; year < 2020; year++)
+            {
+                Spending quartSpen = new Spending();
+            }
+
             var yearlySpending = dbContext.Spendings
-                .Where(expense => expense.Time.Year == 2019)
-                .GroupBy(expense => ((int)expense.Time.Month - 1) / 3)
-                .Select(x => new { Quarter = x.Key, Sum = x.Sum(expense => expense.Value) })
+                .Where(expense => expense.UoM == (UnitOfMeasure)2 && expense.SeasonallyAdjusted == false && expense.ConstructionType == (ConstructionType)2)
+                .Where(expense => expense.Time.Month != 0)
+                .GroupBy(expense => expense.Time.Quarter)
+                .Select(x => new { Quarter = x.Key, Sum = x.Sum(expense => expense.Value)})
                 .ToList();
 
             foreach (var quarter in yearlySpending)
             {
-                Console.WriteLine("Quarter: {0}, Sum: {1:c}", quarter.Quarter + 1, quarter.Sum);
+                Console.WriteLine("Quarter: {0}, Sum: {1}", quarter.Quarter, quarter.Sum);
             }
-
             return new EmptyResult();
         }
 
@@ -100,9 +104,14 @@ namespace ConstructionSpending.Controllers
             var baseVacant = dbContext.Vacancies
                 .Where(value => value.Time == min && value.VacancyType == (VacancyType)2)
                 .FirstOrDefault();
-            Console.WriteLine("{0} {1} {2} {3}", baseVacant.Time.Year, baseVacant.Time.Quarter, baseVacant.Time.Month, baseVacant.Value);
+            //Console.WriteLine("{0} {1} {2} {3}", baseVacant.Time.Year, baseVacant.Time.Quarter, baseVacant.Time.Month, baseVacant.Value);
 
-            //Need to make calculations
+            //Pull from CreateQuartSpend
+            
+            //Do base value for spending
+
+            //Need to make percentage calculations
+
             //Repeat the above for each table
 
             return new EmptyResult();
