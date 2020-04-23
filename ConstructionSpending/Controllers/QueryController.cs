@@ -22,6 +22,37 @@ namespace ConstructionSpending.Controllers
             dbContext = context;
             _logger = logger;
         }
+
+        public IActionResult DateRange()
+        {
+            //create func/query to get range of selected years
+            
+            //date range, will serve as input
+            int startYear =  2015;
+            int endYear = 2019;
+            
+            //tables used for querying
+            IEnumerable<Time> times = dbContext.Times.ToList();
+            IEnumerable<Spending> spending = dbContext.Spendings.ToList(); //remember in monthly, this one needs conversion
+            IEnumerable<Vacancy> vacancies = dbContext.Vacancies.ToList();
+            IEnumerable<Occupancy> occupancies = dbContext.Occupancies.ToList();
+
+            //query of time range
+            var timeRange = dbContext.Times
+                .Where(time => time.Year >= startYear && time.Year <= endYear)
+                .Include(occup => occup.Occupancies)
+                .Select(time => new { time.Year, time.Quarter, time.Occupancies, time.Vacancies })
+                .ToList();
+
+            foreach (var quarter in timeRange)
+            {
+                Console.WriteLine("Year: {0} Quarter: {1}, Occu: {2}, Vac: {3}", quarter.Year, quarter.Quarter
+                    , quarter.Occupancies, quarter.Vacancies);
+            }
+
+
+            return new EmptyResult();
+        }
         public IActionResult Quarter()
         {
             //query to group values by quarter
@@ -33,7 +64,7 @@ namespace ConstructionSpending.Controllers
 
             foreach (var quarter in yearlySpending)
             {
-                Console.WriteLine("Quarter: {0}, Sum: {1}", quarter.Quarter + 1, quarter.Sum);
+                Console.WriteLine("Quarter: {0}, Sum: {1:c}", quarter.Quarter + 1, quarter.Sum);
             }
 
             return new EmptyResult();
