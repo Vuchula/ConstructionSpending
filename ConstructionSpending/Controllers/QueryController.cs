@@ -60,27 +60,6 @@ namespace ConstructionSpending.Controllers
 
             return new EmptyResult();
         }
-        public IActionResult SpendToQuarter()
-        {
-            for (int year = 2002; year < 2020; year++)
-            {
-                Spending quartSpen = new Spending();
-            }
-
-            var yearlySpending = dbContext.Spendings
-                .Where(expense => expense.UoM == (UnitOfMeasure)2 && expense.SeasonallyAdjusted == false && expense.ConstructionType == (ConstructionType)2)
-                .Where(expense => expense.Time.Month != 0)
-                .GroupBy(expense => expense.Time.Quarter)
-                .Select(x => new { Quarter = x.Key, Sum = x.Sum(expense => expense.Value)})
-                .ToList();
-
-            foreach (var quarter in yearlySpending)
-            {
-                Console.WriteLine("Quarter: {0}, Sum: {1}", quarter.Quarter, quarter.Sum);
-            }
-            return new EmptyResult();
-        }
-
         public IActionResult PercentageChange()
         {
             //Using 2000 Q1 as base number we want to calculate the change in
@@ -88,27 +67,27 @@ namespace ConstructionSpending.Controllers
             //2.Vacant Houses
             //3.Total Houses over time
 
-            //declaring the base time = 2000, Q1, month = 0
+            //declaring the base time = 2002, Q1, month = 0
             var min = dbContext.Times
                 .OrderBy(time => time.Year).ThenBy(time => time.Quarter).ThenBy(time => time.Month)
                 .Where(time=> time.Year == 2002)
                 .FirstOrDefault();
             //Console.WriteLine("{0}, {1}, {2}", min.Year, min.Quarter, min.Month);
 
-            //Fetch base value for each Occ, Vac, Spending
+            //Fetch base value for each Occ
             var baseOccupied = dbContext.Occupancies
                 .Where(value => value.Time == min && value.OccupancyType == (OccupancyType)2)
                 .FirstOrDefault();
             //Console.WriteLine("{0} {1} {2} {3}", baseOccupied.Time.Year, baseOccupied.Time.Quarter, baseOccupied.Time.Month, baseOccupied.Value);
 
+            //Fetch base value for Vac
             var baseVacant = dbContext.Vacancies
                 .Where(value => value.Time == min && value.VacancyType == (VacancyType)2)
                 .FirstOrDefault();
             //Console.WriteLine("{0} {1} {2} {3}", baseVacant.Time.Year, baseVacant.Time.Quarter, baseVacant.Time.Month, baseVacant.Value);
 
-            //Pull from CreateQuartSpend
+            //Fetch base value for Spending
             
-            //Do base value for spending
 
             //Need to make percentage calculations
 

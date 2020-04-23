@@ -252,6 +252,51 @@ namespace ConstructionSpending.Controllers
             return View(expenses);
         }
 
+        Time SearchQuartTime(int year, Quarter quarter)
+        {
+            Time matchQuarter = dbContext.Times
+                .Where(time => time.Month == 0 && time.Year == year && time.Quarter == quarter)
+                .FirstOrDefault();
+            return matchQuarter;
+        }
+        public IActionResult Spending2Quarter()
+        {
+            for (int year = 2002; year < 2020; year++)
+            {
+                //query to transform monthly values to quarters
+                var quarterlySpending = dbContext.Spendings
+                    .Where(expense => expense.UoM == (UnitOfMeasure)2 && expense.SeasonallyAdjusted == false
+                    && expense.ConstructionType == (ConstructionType)2)
+                    .Where(expense => expense.Time.Year == year && expense.Time.Month != 0)
+                    .GroupBy(expense => expense.Time.Quarter)
+                    .Select(x => new { Quarter = x.Key, Sum = x.Sum(expense => expense.Value) })
+                    .ToList();
+                foreach (var quarter in quarterlySpending)
+                {
+                    //Creating new Spending for quarter
+                    Spending quartSpent = new Spending()
+                    {
+                        //Assigning Total constType, millions UoM, not season adjusted
+                        ConstructionType = (ConstructionType)2,
+                        UoM = (UnitOfMeasure)2,
+                        SeasonallyAdjusted = false,
+                    };
+                    //Assigning new quarterly value
+                    quartSpent.Value = quarter.Sum;
+                    //assigning correct timeID
+                    quartSpent.Time = SearchQuartTime(year, quarter.Quarter);
+                    //Save Values
+                    dbContext.Add(quartSpent);
+                    //Display Saved Values on Output
+                    Console.WriteLine("Successfully added ID: {0} {1} {2} {3} {4} {5}", quartSpent.Time.TimeID, quartSpent.Time.Year,
+                        quartSpent.Time.Quarter, quartSpent.Time.Month, quartSpent.Value, quartSpent.ConstructionType);
+                }
+            }
+            dbContext.SaveChanges();
+            Console.WriteLine("Spending Table Updated!");
+            return new EmptyResult();
+        }
+
         //parameters HV data in Response
         //string percentage = "RATE"; //ignoring "E_" Sampling Variability
         string unit_count = "ESTIMATE";
