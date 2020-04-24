@@ -1,0 +1,66 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "SavedThis";
+}
+
+<h1>Saved Years</h1>
+
+@if (Model.reports!= null)
+{
+    @foreach (var report in Model.reports)
+    {
+
+        <div class="content">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Quarter</th>
+                        <th scope="col">Spending(in millions of dollars)</th>
+                        <th scope="col">Vacancy(in 1000's of units)</th>
+                        <th scope="col">Occupancy(in 1000's of units)</th>
+                        <th scope="col">Total Units</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <form asp-controller="Home" asp-action="DeleteThis" method="get" class="form-inline" role="form">
+                        <div class="form-group">
+                            <select class="form-control" name="year">
+                                <option value=@report.year>@report.year</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">Delete This!</button>
+                    </form>
+                    <tr>
+                        <th scope="row">Q1</th>
+                        <td>$@report.spendingQ.Q1</td>
+                        <td>@report.vaccancyQ.Q1</td>
+                        <td>@report.occupancyQ.Q1</td>
+                        <td>@report.totalUnitsQ.Q1</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Q2</th>
+                        <td>$@report.spendingQ.Q2</td>
+                        <td>@report.vaccancyQ.Q2</td>
+                        <td>@report.occupancyQ.Q2</td>
+                        <td>@report.totalUnitsQ.Q2</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Q3</th>
+                        <td>$@report.spendingQ.Q3</td>
+                        <td>@report.vaccancyQ.Q3</td>
+                        <td>@report.occupancyQ.Q3</td>
+                        <td>@report.totalUnitsQ.Q3</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Q4</th>
+                        <td>$@report.spendingQ.Q4</td>
+                        <td>@report.vaccancyQ.Q4</td>
+                        <td>@report.occupancyQ.Q4</td>
+                        <td>@report.totalUnitsQ.Q4</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+}
+

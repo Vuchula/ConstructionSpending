@@ -26,5 +26,6 @@ namespace ConstructionSpending.DataAccess
         public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Market> Markets { get; set; }
+        public DbSet<SavedYears> Years { get; set; }
     }
 }
