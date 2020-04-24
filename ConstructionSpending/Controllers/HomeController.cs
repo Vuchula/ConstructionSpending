@@ -598,7 +598,7 @@ namespace ConstructionSpending.Controllers
             TotalUnitsQ totalUnitsQ = new TotalUnitsQ();
             foreach (var qValue in selectYearSpending)
             {
-                if(qValue.Time.Quarter == Quarter.Q1)
+                if (qValue.Time.Quarter == Quarter.Q1)
                     spendingQ.Q1 = qValue.Value;
                 if (qValue.Time.Quarter == Quarter.Q2)
                     spendingQ.Q2 = qValue.Value;
@@ -655,7 +655,7 @@ namespace ConstructionSpending.Controllers
             if (year != null)
             {
                 report = getRawResults(int.Parse(year));
-               
+
             }
             mymodel.report = report;
             IList<int> time = new List<int>() { 2002,2003,2004,2005,2006,2007,2008,2009,
@@ -677,13 +677,13 @@ namespace ConstructionSpending.Controllers
 
                 var Years = dbContext.Years.ToList();
                 Boolean found = false;
-                foreach( SavedYears savedyear in Years)
+                foreach (SavedYears savedyear in Years)
                 {
-                    if(savedyear.savedYear == int.Parse(year))
+                    if (savedyear.savedYear == int.Parse(year))
                     {
                         found = true;
                     }
-                    
+
                 }
                 if (found == false)
                 {
@@ -693,7 +693,7 @@ namespace ConstructionSpending.Controllers
             }
             List<SavedYears> yearsToShow = dbContext.Years.ToList();
             List<Report> reports = new List<Report>();
-            for(int i = 0; i < yearsToShow.Count(); i++)
+            for (int i = 0; i < yearsToShow.Count(); i++)
             {
                 reports.Add(getRawResults(yearsToShow[i].savedYear));
             }
@@ -715,9 +715,120 @@ namespace ConstructionSpending.Controllers
             return View(mymodel);
         }
 
-            public IActionResult Graphs()
+        public IActionResult Graphs()
         {
-            return View();
+
+            //Using 2002 Q1 as base number we want to calculate the change in
+            //1.Occupied Houses
+            //2.Vacant Houses
+            //3.Total Houses over time
+
+            //declaring the base time = 2002, Q1, month = 0
+            var min = dbContext.Times
+                .OrderBy(time => time.Year).ThenBy(time => time.Quarter).ThenBy(time => time.Month)
+                .Where(time => time.Year == 2002)
+                .FirstOrDefault();
+            //Console.WriteLine("Time: {0}, {1}, {2}", min.Year, min.Quarter, min.Month);
+
+            //Fetch base value for each Occ
+            var baseOccupied = dbContext.Occupancies
+                .Where(value => value.Time == min && value.OccupancyType == (OccupancyType)2)
+                .FirstOrDefault();
+            //Console.WriteLine("Occupied Units: {0} {1} {2} {3}", baseOccupied.Time.Year, baseOccupied.Time.Quarter, baseOccupied.Time.Month, baseOccupied.Value);
+
+            //Fetch base value for Vac
+            var baseVacant = dbContext.Vacancies
+                .Where(value => value.Time == min && value.VacancyType == (VacancyType)2)
+                .FirstOrDefault();
+            //Console.WriteLine("Vacant Units: {0} {1} {2} {3}", baseVacant.Time.Year, baseVacant.Time.Quarter, baseVacant.Time.Month, baseVacant.Value);
+
+            //Fetch base value for Spending
+            var baseSpend = dbContext.Spendings
+                .Where(value => value.Time == min && value.ConstructionType == (ConstructionType)2)
+                .FirstOrDefault();
+            //Console.WriteLine("Cons. Spending: {0} {1} {2} {3}", baseSpend.Time.Year, baseSpend.Time.Quarter, baseSpend.Time.Month, baseSpend.Value);
+
+            //Need to make percentage calculations
+
+            //Occupied in percentage since 2002
+            var percentOccupy = dbContext.Occupancies
+                .Where(value => value.OccupancyType == (OccupancyType)2 && value.Time.Year > 2001)
+                .OrderBy(value => value.Time.Year).ThenBy(value => value.Time.Quarter)
+                .Select(value => new
+                {
+                    Year = value.Time.Year,
+                    Quarter = value.Time.Quarter,
+                    Percentage = ((value.Value - baseOccupied.Value) / baseOccupied.Value) * 100
+                })
+                .ToList();
+
+            //Vacant in percentage since 2002
+            var percentVacant = dbContext.Vacancies
+                .Where(value => value.VacancyType == (VacancyType)2 && value.Time.Year > 2001)
+                .OrderBy(value => value.Time.Year).ThenBy(value => value.Time.Quarter)
+                .Select(value => new
+                {
+                    Year = value.Time.Year,
+                    Quarter = value.Time.Quarter,
+                    Percentage = ((value.Value - baseVacant.Value) / baseVacant.Value) * 100
+                })
+                .ToList();
+
+            //Spending in percentage since 2002
+            var percentSpend = dbContext.Spendings
+                .Where(value => value.ConstructionType == (ConstructionType)2 && value.Time.Year > 2001
+                && value.Time.Month == 0)
+                .OrderBy(value => value.Time.Year).ThenBy(value => value.Time.Quarter)
+                .Select(value => new
+                {
+                    Year = value.Time.Year,
+                    Quarter = value.Time.Quarter,
+                    Percentage = ((value.Value - baseSpend.Value) / baseSpend.Value) * 100
+                })
+                .ToList();
+
+            //Toggle of between query data
+            //var data = percentOccupy;
+            //var data = percentVacant;
+            var data = percentSpend;
+
+
+            //List for date, values
+            List<string> date = new List<string>();
+            List<double> rate = new List<double>();
+
+            //Add values to lists
+            foreach (var value in data)
+            {
+
+                if (value.Quarter.ToString().Equals("Q1"))
+                {
+                    date.Add(value.Year.ToString() + "-" + "01");
+                }
+                if (value.Quarter.ToString().Equals("Q2"))
+                {
+                    date.Add(value.Year.ToString() + "-" + "04");
+                }
+                if (value.Quarter.ToString().Equals("Q3"))
+                {
+                    date.Add(value.Year.ToString() + "-" + "07");
+                }
+                if (value.Quarter.ToString().Equals("Q4"))
+                {
+                    date.Add(value.Year.ToString() + "-" + "10");
+                }
+
+                //date.Add(value.Year.ToString() + value.Quarter.ToString());
+                rate.Add((double)value.Percentage);
+                Console.WriteLine("Year and Quarter:" + date);
+                Console.WriteLine("Percentage:" + rate);
+            }
+            dynamic model = new ExpandoObject();
+            model.date = date;
+            model.rate = rate;
+
+            return View(model);
+
         }
 
         public IActionResult AboutUs()
