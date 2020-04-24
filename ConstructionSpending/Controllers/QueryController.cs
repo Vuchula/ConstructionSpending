@@ -26,11 +26,11 @@ namespace ConstructionSpending.Controllers
         public IActionResult DateRange()
         {
             //create func/query to get range of selected years
-            
+
             //date range, will serve as input
-            int startYear =  2015;
+            int startYear = 2015;
             int endYear = 2019;
-            
+
             //tables used for querying
             //IEnumerable<Time> times = dbContext.Times.ToList();
             //IEnumerable<Spending> spending = dbContext.Spendings.ToList(); //remember in monthly, this one needs conversion
@@ -55,7 +55,7 @@ namespace ConstructionSpending.Controllers
             {
                 Console.WriteLine("{0}, {1}, {2}", quarter.Year, quarter.Quarter, quarter.Month);
                 //Console.WriteLine("Year: {0} Quarter: {1}, Occu: {2}, Vac: {3}", quarter.Year, quarter.Quarter
-                    //, quarter.Occupancies, quarter.Vacancies);
+                //, quarter.Occupancies, quarter.Vacancies);
             }
 
             return new EmptyResult();
@@ -70,7 +70,7 @@ namespace ConstructionSpending.Controllers
             //declaring the base time = 2002, Q1, month = 0
             var min = dbContext.Times
                 .OrderBy(time => time.Year).ThenBy(time => time.Quarter).ThenBy(time => time.Month)
-                .Where(time=> time.Year == 2002)
+                .Where(time => time.Year == 2002)
                 .FirstOrDefault();
             //Console.WriteLine("{0}, {1}, {2}", min.Year, min.Quarter, min.Month);
 
@@ -87,7 +87,7 @@ namespace ConstructionSpending.Controllers
             //Console.WriteLine("{0} {1} {2} {3}", baseVacant.Time.Year, baseVacant.Time.Quarter, baseVacant.Time.Month, baseVacant.Value);
 
             //Fetch base value for Spending
-            
+
 
             //Need to make percentage calculations
 
@@ -95,5 +95,49 @@ namespace ConstructionSpending.Controllers
 
             return new EmptyResult();
         }
+
+        public IActionResult RawResults()
+        {
+            //Query for Total Spending in Quarters
+            var spendingQuery = dbContext.Spendings
+                .Where(s => s.ConstructionType == (ConstructionType)2 && s.Time.Month == 0
+                && s.UoM == (UnitOfMeasure)2 && s.SeasonallyAdjusted == false)
+                .Include(s => s.Time)
+                .OrderBy(s => s.Time.Year).ThenBy(s => s.Time.Quarter)
+                .ToList();
+
+            //Query for Occupied Values in Quarters
+            var occupiedQuery = dbContext.Occupancies
+                .Where(o => o.OccupancyType == (OccupancyType)2 && o.UoM == (UnitOfMeasure)1 && o.SeasonallyAdjusted == false)
+                .Include(o => o.Time)
+                .OrderBy(o => o.Time.Year).ThenBy(o => o.Time.Quarter)
+                .ToList();
+
+            //Query for Vacancy Values in Quarters
+            var vacancyQuery = dbContext.Vacancies
+                .Where(v => v.VacancyType == (VacancyType)2 && v.UoM == (UnitOfMeasure)1 && v.SeasonallyAdjusted == false)
+                .Include(v => v.Time)
+                .OrderBy(v => v.Time.Year).ThenBy(v => v.Time.Quarter)
+                .ToList();
+            
+            //Four sources to toggle between
+            var data = spendingQuery;
+            //var data = occupiedQuery;
+            //var data = vacancyQuery;
+            //var data = totalUnitsQuery;
+
+            //query to select year
+            var selectYear = data
+                .Where(d => d.Time.Year == 2002)
+                .ToList();
+            
+            foreach (var qValue in selectYear)
+            {
+                Console.WriteLine("{0} {1} {2}", qValue.Time.Year, qValue.Time.Quarter, qValue.Value);
+            }
+
+            return new EmptyResult();
+        }
+
     }
 }
