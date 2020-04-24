@@ -283,7 +283,7 @@ namespace ConstructionSpending.Controllers
                     };
                     //Assigning new quarterly value
                     quartSpent.Value = quarter.Sum;
-                    //assigning correct timeID
+                    //Assigning correct timeID
                     quartSpent.Time = SearchQuartTime(year, quarter.Quarter);
                     //Save Values
                     dbContext.Add(quartSpent);
