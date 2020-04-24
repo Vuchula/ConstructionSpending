@@ -1,228 +1,98 @@
-﻿
+﻿@model dynamic
 @{
     ViewData["Title"] = "Reports";
 }
-    <head>
-        <link rel="stylesheet" type="text/css" href="~/css/reports.css">
-    </head>
-<div style="padding-top: 50px;text-align: center;
+<head>
+    <!--<link rel="stylesheet" type="text/css" href="~/css/reports.css">-->
+</head>
+<!--<div style="padding-top: 50px;text-align: center;
     background-color: black;
     color:white;
     border-radius: 1px;">
     <h1>Construction Spending</h1>
 </div>
-<img>
-<div class="main">
-    <hr>
-    <img>
-    <div class="content">
-        Residential Construction spending by year(Millions of dollars)
-        <!-- <select name="choice">
-        <option value="first">2012</option>
-        <option value="second">2013</option>
-        <option value="third">2014</option>
-        <option value="fourth">2015</option>
-        <option value="fifth">2016</option>
-        <option value="sixth">2017</option>
-        <option value="seventh">2018</option>
-        <option value="eigth">2019</option>
-        <option value="ninth">2020</option>
-        </select> -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Year</th>
-                    <th>Jan</th>
-                    <th>Feb</th>
-                    <th>Mar</th>
-                    <th>Apr</th>
-                    <th>May</th>
-                    <th>Jun</th>
-                    <th>Jul</th>
-                    <th>Aug</th>
-                    <th>Sep</th>
-                    <th>Oct</th>
-                    <th>Nov</th>
-                    <th>Dec</th>
-                    <th>Q1</th>
-                    <th>Q2</th>
-                    <th>Q3</th>
-                    <th>Q4</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td data-column="Year">2011</td>
-                    <td data-column="Jan">$25,972</td>
-                    <td data-column="Feb">$25,721</td>
-                    <td data-column="Mar">$29,826</td>
-                    <td data-column="Apr">$33,008</td>
-                    <td data-column="May">$35,059</td>
-                    <td data-column="Jun">$37,908</td>
-                    <td data-column="Jul">$38,880</td>
-                    <td data-column="Aug">$38,359</td>
-                    <td data-column="Sep">$36,082</td>
-                    <td data-column="Oct">$36,226</td>
-                    <td data-column="Nov">$34,570</td>
-                    <td data-column="Dec">$30,352</td>
-                    <td data-column="Q1">$81,519</td>
-                    <td data-column="Q2">$90,250</td>
-                    <td data-column="Q3">$89,473</td>
-                    <td data-column="Q4">$90,839</td>
-                </tr>
-                <tr>
-                    <td data-column="Year">2012</td>
-                    <td data-column="Jan">$25,972</td>
-                    <td data-column="Feb">$25,721</td>
-                    <td data-column="Mar">$29,826</td>
-                    <td data-column="Apr">$33,008</td>
-                    <td data-column="May">$35,059</td>
-                    <td data-column="Jun">$37,908</td>
-                    <td data-column="Jul">$38,880</td>
-                    <td data-column="Aug">$38,359</td>
-                    <td data-column="Sep">$36,082</td>
-                    <td data-column="Oct">$36,226</td>
-                    <td data-column="Nov">$34,570</td>
-                    <td data-column="Dec">$30,352</td>
-                    <td data-column="Q1">$81,519</td>
-                    <td data-column="Q2">$90,250</td>
-                    <td data-column="Q3">$89,473</td>
-                    <td data-column="Q4">$90,839</td>
-                </tr>
-                <tr>
-                    <td data-column="Year">2013</td>
-                    <td data-column="Jan">$25,972</td>
-                    <td data-column="Feb">$25,721</td>
-                    <td data-column="Mar">$29,826</td>
-                    <td data-column="Apr">$33,008</td>
-                    <td data-column="May">$35,059</td>
-                    <td data-column="Jun">$37,908</td>
-                    <td data-column="Jul">$38,880</td>
-                    <td data-column="Aug">$38,359</td>
-                    <td data-column="Sep">$36,082</td>
-                    <td data-column="Oct">$36,226</td>
-                    <td data-column="Nov">$34,570</td>
-                    <td data-column="Dec">$30,352</td>
-                    <td data-column="Q1">$81,519</td>
-                    <td data-column="Q2">$90,250</td>
-                    <td data-column="Q3">$89,473</td>
-                    <td data-column="Q4">$90,839</td>
-                </tr>
-                <tr>
-                    <td data-column="Year">2014</td>
-                    <td data-column="Jan">$25,972</td>
-                    <td data-column="Feb">$25,721</td>
-                    <td data-column="Mar">$29,826</td>
-                    <td data-column="Apr">$33,008</td>
-                    <td data-column="May">$35,059</td>
-                    <td data-column="Jun">$37,908</td>
-                    <td data-column="Jul">$38,880</td>
-                    <td data-column="Aug">$38,359</td>
-                    <td data-column="Sep">$36,082</td>
-                    <td data-column="Oct">$36,226</td>
-                    <td data-column="Nov">$34,570</td>
-                    <td data-column="Dec">$30,352</td>
-                    <td data-column="Q1">$81,519</td>
-                    <td data-column="Q2">$90,250</td>
-                    <td data-column="Q3">$89,473</td>
-                    <td data-column="Q4">$90,839</td>
-                </tr>
-                <tr>
-                    <td data-column="Year">2015</td>
-                    <td data-column="Jan">$25,972</td>
-                    <td data-column="Feb">$25,721</td>
-                    <td data-column="Mar">$29,826</td>
-                    <td data-column="Apr">$33,008</td>
-                    <td data-column="May">$35,059</td>
-                    <td data-column="Jun">$37,908</td>
-                    <td data-column="Jul">$38,880</td>
-                    <td data-column="Aug">$38,359</td>
-                    <td data-column="Sep">$36,082</td>
-                    <td data-column="Oct">$36,226</td>
-                    <td data-column="Nov">$34,570</td>
-                    <td data-column="Dec">$30,352</td>
-                    <td data-column="Q1">$81,519</td>
-                    <td data-column="Q2">$90,250</td>
-                    <td data-column="Q3">$89,473</td>
-                    <td data-column="Q4">$90,839</td>
-                </tr>
-                <tr>
-                    <td data-column="Year">2016</td>
-                    <td data-column="Jan">$25,972</td>
-                    <td data-column="Feb">$25,721</td>
-                    <td data-column="Mar">$29,826</td>
-                    <td data-column="Apr">$33,008</td>
-                    <td data-column="May">$35,059</td>
-                    <td data-column="Jun">$37,908</td>
-                    <td data-column="Jul">$38,880</td>
-                    <td data-column="Aug">$38,359</td>
-                    <td data-column="Sep">$36,082</td>
-                    <td data-column="Oct">$36,226</td>
-                    <td data-column="Nov">$34,570</td>
-                    <td data-column="Dec">$30,352</td>
-                    <td data-column="Q1">$81,519</td>
-                    <td data-column="Q2">$90,250</td>
-                    <td data-column="Q3">$89,473</td>
-                    <td data-column="Q4">$90,839</td>
-                </tr>
-                <tr>
-                    <td data-column="Year">2017</td>
-                    <td data-column="Jan">$25,972</td>
-                    <td data-column="Feb">$25,721</td>
-                    <td data-column="Mar">$29,826</td>
-                    <td data-column="Apr">$33,008</td>
-                    <td data-column="May">$35,059</td>
-                    <td data-column="Jun">$37,908</td>
-                    <td data-column="Jul">$38,880</td>
-                    <td data-column="Aug">$38,359</td>
-                    <td data-column="Sep">$36,082</td>
-                    <td data-column="Oct">$36,226</td>
-                    <td data-column="Nov">$34,570</td>
-                    <td data-column="Dec">$30,352</td>
-                    <td data-column="Q1">$81,519</td>
-                    <td data-column="Q2">$90,250</td>
-                    <td data-column="Q3">$89,473</td>
-                    <td data-column="Q4">$90,839</td>
-                </tr>
-                <tr>
-                    <td data-column="Year">2018</td>
-                    <td data-column="Jan">$25,972</td>
-                    <td data-column="Feb">$25,721</td>
-                    <td data-column="Mar">$29,826</td>
-                    <td data-column="Apr">$33,008</td>
-                    <td data-column="May">$35,059</td>
-                    <td data-column="Jun">$37,908</td>
-                    <td data-column="Jul">$38,880</td>
-                    <td data-column="Aug">$38,359</td>
-                    <td data-column="Sep">$36,082</td>
-                    <td data-column="Oct">$36,226</td>
-                    <td data-column="Nov">$34,570</td>
-                    <td data-column="Dec">$30,352</td>
-                    <td data-column="Q1">$81,519</td>
-                    <td data-column="Q2">$90,250</td>
-                    <td data-column="Q3">$89,473</td>
-                    <td data-column="Q4">$90,839</td>
-                </tr>
-                <tr>
-                    <td data-column="Year">2019</td>
-                    <td data-column="Jan">$25,972</td>
-                    <td data-column="Feb">$25,721</td>
-                    <td data-column="Mar">$29,826</td>
-                    <td data-column="Apr">$33,008</td>
-                    <td data-column="May">$35,059</td>
-                    <td data-column="Jun">$37,908</td>
-                    <td data-column="Jul">$38,880</td>
-                    <td data-column="Aug">$38,359</td>
-                    <td data-column="Sep">$36,082</td>
-                    <td data-column="Oct">$36,226</td>
-                    <td data-column="Nov">$34,570</td>
-                    <td data-column="Dec">$30,352</td>
-                    <td data-column="Q1">$81,519</td>
-                    <td data-column="Q2">$90,250</td>
-                    <td data-column="Q3">$89,473</td>
-                    <td data-column="Q4">$90,839</td>
-                </tr>
-            </tbody>
-        </table>
+<img>-->
+<div class="jumbotron">
+    <h1 class="display-4">Hello, world!</h1>
+    <p class="lead">What the fuck do I put here?</p>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form asp-controller="Home" asp-action="Reports" method="get" class="form-inline" role="form">
+                <div class="form-group">
+                    <select class="form-control" name="year">
+                        <option>Year</option>
+                        @foreach (var year in Model.Year)
+                        {
+                            <option value=@year>@year</option>
+                        }
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+            </form>
+        </div>
+        <div class="col">
+            @if (Model.report.spendingQ != null)
+            {
+                <form asp-controller="Home" asp-action="SaveThis" method="get" class="form-inline" role="form">
+                    <div class="form-group">
+                        <select class="form-control" name="year">
+                            <option>@Model.report.year</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn"><img src="https://img.icons8.com/metro/26/000000/save.png" /></button>
+                </form>
+            }
         </div>
     </div>
+</div>
+    <hr>
+
+    @if (Model.report.spendingQ != null)
+    {
+
+        <div class="content">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Quarter</th>
+                        <th scope="col">Spending(in millions of dollars)</th>
+                        <th scope="col">Vacancy(in 1000's of units)</th>
+                        <th scope="col">Occupancy(in 1000's of units)</th>
+                        <th scope="col">Total Units</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Q1</th>
+                        <td>$@Model.report.spendingQ.Q1</td>
+                        <td>@Model.report.vaccancyQ.Q1</td>
+                        <td>@Model.report.occupancyQ.Q1</td>
+                        <td>@Model.report.totalUnitsQ.Q1</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Q2</th>
+                        <td>$@Model.report.spendingQ.Q2</td>
+                        <td>@Model.report.vaccancyQ.Q2</td>
+                        <td>@Model.report.occupancyQ.Q2</td>
+                        <td>@Model.report.totalUnitsQ.Q2</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Q3</th>
+                        <td>$@Model.report.spendingQ.Q3</td>
+                        <td>@Model.report.vaccancyQ.Q3</td>
+                        <td>@Model.report.occupancyQ.Q3</td>
+                        <td>@Model.report.totalUnitsQ.Q3</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Q4</th>
+                        <td>$@Model.report.spendingQ.Q4</td>
+                        <td>@Model.report.vaccancyQ.Q4</td>
+                        <td>@Model.report.occupancyQ.Q4</td>
+                        <td>@Model.report.totalUnitsQ.Q4</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }

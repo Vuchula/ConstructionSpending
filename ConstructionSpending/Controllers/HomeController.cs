@@ -1,18 +1,15 @@
-﻿using System;
+﻿using ConstructionSpending.APIHandlerManager;
+using ConstructionSpending.DataAccess;
+using ConstructionSpending.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ConstructionSpending.Models;
-using ConstructionSpending.APIHandlerManager;
-using ConstructionSpending.DataAccess;
 using System.Net.Http;
-using System.Data.Entity.Core.Objects;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Diagnostics.Tracing;
 
 namespace ConstructionSpending.Controllers
 {
@@ -283,7 +280,7 @@ namespace ConstructionSpending.Controllers
                     };
                     //Assigning new quarterly value
                     quartSpent.Value = quarter.Sum;
-                    //assigning correct timeID
+                    //Assigning correct timeID
                     quartSpent.Time = SearchQuartTime(year, quarter.Quarter);
                     //Save Values
                     dbContext.Add(quartSpent);
@@ -495,7 +492,7 @@ namespace ConstructionSpending.Controllers
                         result.Market = market;
                     }
                 }
-                
+
                 //assign value
                 result.Value = value.cell_value;
                 //assign time
@@ -540,12 +537,185 @@ namespace ConstructionSpending.Controllers
             return View();
         }
 
-        public IActionResult Reports()
+        public Report getRawResults(int year)
         {
-            return View();
+            //Query for Total Spending in Quarters
+            var spendingQuery = dbContext.Spendings
+                .Where(s => s.ConstructionType == (ConstructionType)2 && s.Time.Month == 0
+                && s.UoM == (UnitOfMeasure)2 && s.SeasonallyAdjusted == false)
+                .Include(s => s.Time)
+                .OrderBy(s => s.Time.Year).ThenBy(s => s.Time.Quarter)
+                .ToList();
+
+            //Query for Occupied Values in Quarters
+            var occupiedQuery = dbContext.Occupancies
+                .Where(o => o.OccupancyType == (OccupancyType)2 && o.UoM == (UnitOfMeasure)1 && o.SeasonallyAdjusted == false)
+                .Include(o => o.Time)
+                .OrderBy(o => o.Time.Year).ThenBy(o => o.Time.Quarter)
+                .ToList();
+
+            //Query for Vacancy Values in Quarters
+            var vacancyQuery = dbContext.Vacancies
+                .Where(v => v.VacancyType == (VacancyType)2 && v.UoM == (UnitOfMeasure)1 && v.SeasonallyAdjusted == false)
+                .Include(v => v.Time)
+                .OrderBy(v => v.Time.Year).ThenBy(v => v.Time.Quarter)
+                .ToList();
+
+            //Query for total Units in Quarters
+            var totalUnitsQuery = occupiedQuery
+                .Join(vacancyQuery, occ => occ.Time, vac => vac.Time,
+                (occ, vac) => new
+                {
+                    Year = occ.Time.Year,
+                    Quarter = occ.Time.Quarter,
+                    Value = occ.Value + vac.Value //Total Value
+                });
+
+            //Four sources to toggle between
+            var spendingData = spendingQuery;
+            var occupiedData = occupiedQuery;
+            var vacantData = vacancyQuery;
+            var totalUnitData = totalUnitsQuery;
+
+            //query to select year
+            var selectYearSpending = spendingData
+                .Where(d => d.Time.Year == year)
+                .ToList();
+            var selectYearOccupied = occupiedData
+                .Where(d => d.Time.Year == year)
+                .ToList();
+            var selectVaccant = vacantData
+                .Where(d => d.Time.Year == year)
+                .ToList();
+            var selectTotalUnit = totalUnitData
+                .Where(d => d.Year == year)
+                .ToList();
+
+            Report report = new Report();
+            SpendingQ spendingQ = new SpendingQ();
+            VaccancyQ vaccancyQ = new VaccancyQ();
+            OccupancyQ occupancyQ = new OccupancyQ();
+            TotalUnitsQ totalUnitsQ = new TotalUnitsQ();
+            foreach (var qValue in selectYearSpending)
+            {
+                if(qValue.Time.Quarter == Quarter.Q1)
+                    spendingQ.Q1 = qValue.Value;
+                if (qValue.Time.Quarter == Quarter.Q2)
+                    spendingQ.Q2 = qValue.Value;
+                if (qValue.Time.Quarter == Quarter.Q3)
+                    spendingQ.Q3 = qValue.Value;
+                if (qValue.Time.Quarter == Quarter.Q4)
+                    spendingQ.Q4 = qValue.Value;
+            }
+            foreach (var qValue in selectYearOccupied)
+            {
+                if (qValue.Time.Quarter == Quarter.Q1)
+                    occupancyQ.Q1 = qValue.Value;
+                if (qValue.Time.Quarter == Quarter.Q2)
+                    occupancyQ.Q2 = qValue.Value;
+                if (qValue.Time.Quarter == Quarter.Q3)
+                    occupancyQ.Q3 = qValue.Value;
+                if (qValue.Time.Quarter == Quarter.Q4)
+                    occupancyQ.Q4 = qValue.Value;
+            }
+            foreach (var qValue in selectVaccant)
+            {
+                if (qValue.Time.Quarter == Quarter.Q1)
+                    vaccancyQ.Q1 = qValue.Value;
+                if (qValue.Time.Quarter == Quarter.Q2)
+                    vaccancyQ.Q2 = qValue.Value;
+                if (qValue.Time.Quarter == Quarter.Q3)
+                    vaccancyQ.Q3 = qValue.Value;
+                if (qValue.Time.Quarter == Quarter.Q4)
+                    vaccancyQ.Q4 = qValue.Value;
+            }
+            foreach (var qValue in selectTotalUnit)
+            {
+                if (qValue.Quarter == Quarter.Q1)
+                    totalUnitsQ.Q1 = qValue.Value;
+                if (qValue.Quarter == Quarter.Q2)
+                    totalUnitsQ.Q2 = qValue.Value;
+                if (qValue.Quarter == Quarter.Q3)
+                    totalUnitsQ.Q3 = qValue.Value;
+                if (qValue.Quarter == Quarter.Q4)
+                    totalUnitsQ.Q4 = qValue.Value;
+            }
+            report.spendingQ = spendingQ;
+            report.occupancyQ = occupancyQ;
+            report.vaccancyQ = vaccancyQ;
+            report.totalUnitsQ = totalUnitsQ;
+            report.year = year;
+            return report;
         }
 
-        public IActionResult Graphs()
+        public IActionResult Reports(String year)
+        {
+            dynamic mymodel = new ExpandoObject();
+            Report report = new Report();
+            if (year != null)
+            {
+                report = getRawResults(int.Parse(year));
+               
+            }
+            mymodel.report = report;
+            IList<int> time = new List<int>() { 2002,2003,2004,2005,2006,2007,2008,2009,
+                2010,2011,2012,2013,2014,2015,2016,2017,2018,2019};
+            mymodel.Year = time;
+            //List<String> categories = new List<string>() { "Vaccancy", "Occupancy", "Spending", "Total Units" };
+            //mymodel.Category = categories;
+            return View(mymodel);
+        }
+
+
+        public IActionResult SaveThis(string year)
+        {
+            dynamic mymodel = new ExpandoObject();
+            if (year != null)
+            {
+                SavedYears savedYear = new SavedYears();
+                savedYear.savedYear = int.Parse(year);
+
+                var Years = dbContext.Years.ToList();
+                Boolean found = false;
+                foreach( SavedYears savedyear in Years)
+                {
+                    if(savedyear.savedYear == int.Parse(year))
+                    {
+                        found = true;
+                    }
+                    
+                }
+                if (found == false)
+                {
+                    dbContext.Years.Add(savedYear);
+                    dbContext.SaveChanges();
+                }
+            }
+            List<SavedYears> yearsToShow = dbContext.Years.ToList();
+            List<Report> reports = new List<Report>();
+            for(int i = 0; i < yearsToShow.Count(); i++)
+            {
+                reports.Add(getRawResults(yearsToShow[i].savedYear));
+            }
+            mymodel.reports = reports;
+            return View(mymodel);
+
+        }
+
+        public IActionResult DeleteThis(string year)
+        {
+            dynamic mymodel = new ExpandoObject();
+            if (year != null)
+            {
+                SavedYears years = dbContext.Years.Where(p => p.savedYear == int.Parse(year)).FirstOrDefault();
+                dbContext.Years.Remove(years);
+                dbContext.SaveChanges();
+            }
+            mymodel.year = year;
+            return View(mymodel);
+        }
+
+            public IActionResult Graphs()
         {
             return View();
         }
