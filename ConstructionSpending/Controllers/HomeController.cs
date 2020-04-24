@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace ConstructionSpending.Controllers
 {
@@ -823,10 +824,64 @@ namespace ConstructionSpending.Controllers
                 Console.WriteLine("Year and Quarter:" + date);
                 Console.WriteLine("Percentage:" + rate);
             }
-            dynamic model = new ExpandoObject();
-            model.date = date;
-            model.rate = rate;
+            List<string> occupydate = new List<string>();
+            List<double> occupyrate = new List<double>();
+            var peroccupydata = percentOccupy;
+            foreach (var value in peroccupydata)
+            {
 
+                if (value.Quarter.ToString().Equals("Q1"))
+                {
+                    occupydate.Add(value.Year.ToString() + "-" + "01");
+                }
+                if (value.Quarter.ToString().Equals("Q2"))
+                {
+                    occupydate.Add(value.Year.ToString() + "-" + "04");
+                }
+                if (value.Quarter.ToString().Equals("Q3"))
+                {
+                    occupydate.Add(value.Year.ToString() + "-" + "07");
+                }
+                if (value.Quarter.ToString().Equals("Q4"))
+                {
+                    occupydate.Add(value.Year.ToString() + "-" + "10");
+                }
+
+                //date.Add(value.Year.ToString() + value.Quarter.ToString());
+                occupyrate.Add((double)value.Percentage);
+            }
+            List<string> vacantdate = new List<string>();
+            List<double> vacantrate = new List<double>();
+            var pervacantdata = percentVacant;
+            foreach (var value in percentVacant)
+            {
+
+                if (value.Quarter.ToString().Equals("Q1"))
+                {
+                    vacantdate.Add(value.Year.ToString() + "-" + "01");
+                }
+                if (value.Quarter.ToString().Equals("Q2"))
+                {
+                    vacantdate.Add(value.Year.ToString() + "-" + "04");
+                }
+                if (value.Quarter.ToString().Equals("Q3"))
+                {
+                    vacantdate.Add(value.Year.ToString() + "-" + "07");
+                }
+                if (value.Quarter.ToString().Equals("Q4"))
+                {
+                    vacantdate.Add(value.Year.ToString() + "-" + "10");
+                }
+
+                //date.Add(value.Year.ToString() + value.Quarter.ToString());
+                vacantrate.Add((double)value.Percentage);
+            }
+            dynamic model = new ExpandoObject();
+            Console.WriteLine("Serialised json:" + JsonConvert.SerializeObject(date));
+            model.date = JsonConvert.SerializeObject(date);
+            model.rate = JsonConvert.SerializeObject(rate);
+            model.vacantRate = JsonConvert.SerializeObject(vacantrate);
+            model.occupantRate = JsonConvert.SerializeObject(occupyrate);
             return View(model);
 
         }
