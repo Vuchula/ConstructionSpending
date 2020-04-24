@@ -62,7 +62,7 @@ namespace ConstructionSpending.Controllers
         }
         public IActionResult PercentageChange()
         {
-            //Using 2000 Q1 as base number we want to calculate the change in
+            //Using 2002 Q1 as base number we want to calculate the change in
             //1.Occupied Houses
             //2.Vacant Houses
             //3.Total Houses over time
@@ -119,21 +119,31 @@ namespace ConstructionSpending.Controllers
                 .Include(v => v.Time)
                 .OrderBy(v => v.Time.Year).ThenBy(v => v.Time.Quarter)
                 .ToList();
-            
+
+            //Query for total Units in Quarters
+            var totalUnitsQuery = occupiedQuery
+                .Join(vacancyQuery, occ => occ.Time, vac => vac.Time,
+                (occ, vac) => new
+                {
+                    Year = occ.Time.Year,
+                    Quarter = occ.Time.Quarter,
+                    Value = occ.Value + vac.Value //Total Value
+                });
+
             //Four sources to toggle between
-            var data = spendingQuery;
+            //var data = spendingQuery;
             //var data = occupiedQuery;
             //var data = vacancyQuery;
-            //var data = totalUnitsQuery;
+            var data = totalUnitsQuery;
 
             //query to select year
             var selectYear = data
-                .Where(d => d.Time.Year == 2002)
+                .Where(d => d.Year == 2002)
                 .ToList();
             
             foreach (var qValue in selectYear)
             {
-                Console.WriteLine("{0} {1} {2}", qValue.Time.Year, qValue.Time.Quarter, qValue.Value);
+                Console.WriteLine("{0} {1} {2}", qValue.Year, qValue.Quarter, qValue.Value);
             }
 
             return new EmptyResult();
