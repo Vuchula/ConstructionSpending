@@ -1,4 +1,4 @@
-﻿
+﻿@model dynamic
 @{
     ViewData["Title"] = "Graphs";
 }
@@ -24,12 +24,13 @@
   return rows.map(function(row) { return row[key]; });
 }
 
-
+                console.log(@Model.date);
+                console.log(@Model.rate);
 var trace1 = {
   type: "scatter",
   mode: "lines",
-  x: [2019-01-01,2019-02-01,2019-03-01,2019-04-01,2019-05-01,2019-06-01,2019-07-01,2019-08-01,2019-09-01,2019-10-01,2019-11-01,2019-12-01],
-  y: [7126627,7174264,7284680,7370707,7349043,7300719,7341424,7408393,7453633,7471128,7551636,7498797],
+  x: @Model.date,
+  y: @Model.rate,
   //x: unpack(rows, 'time_slot_date'),
   //y: unpack(rows, 'cell_value'),
   line: {color: '#17BECF'}
