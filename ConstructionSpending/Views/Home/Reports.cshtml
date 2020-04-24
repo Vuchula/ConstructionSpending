@@ -3,6 +3,12 @@
     ViewData["Title"] = "Reports";
 }
 <head>
+    <style>
+    .jumbotron {
+    padding: 0rem 0rem;
+    text-align: center;
+}
+    </style>
     <!--<link rel="stylesheet" type="text/css" href="~/css/reports.css">-->
 </head>
 <!--<div style="padding-top: 50px;text-align: center;
@@ -22,7 +28,6 @@
             <form asp-controller="Home" asp-action="Reports" method="get" class="form-inline" role="form">
                 <div class="form-group">
                     <select class="form-control" name="year">
-                        <option>Year</option>
                         @foreach (var year in Model.Year)
                         {
                             <option value=@year>@year</option>
