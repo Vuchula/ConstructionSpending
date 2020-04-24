@@ -497,13 +497,15 @@ namespace ConstructionSpending.Controllers
             if (year != null && category != null)
             {
                 Console.WriteLine("Year from View " + year + " Category selected " + category);
-                //equities = GetChart(symbol);
-                //equities = equities.OrderBy(c => c.date).ToList(); //Make sure the data is in ascending order of date.
+                List <Vacancy> vacancies = dbContext.Vacancies.Where(p => p.Time.Year == int.Parse(year)).Include(t => t.Time).ToList();
+                List<Occupancy> occupancies = dbContext.Occupancies.Where(p => p.Time.Year == int.Parse(year)).Include(t => t.Time).ToList();
+                List<Spending> spendings = dbContext.Spendings.Where(p => p.Time.Year == int.Parse(year)).Include(t => t.Time).ToList();
+                
             }
             dynamic mymodel = new ExpandoObject();
             IList<int> time = dbContext.Times.Select(p => p.Year).Distinct().ToList();
             mymodel.Year = time;
-            List<String> categories = new List<string>() { "Vaccancy", "Occupancy", "Spending", "Market" };
+            List<String> categories = new List<string>() { "Vaccancy", "Occupancy", "Spending" };
             mymodel.Category = categories;
             return View(mymodel);
         }
