@@ -392,6 +392,14 @@ namespace ConstructionSpending.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult ThankYou(User user)
+        {
+            Console.WriteLine("User " + user);
+            dbContext.Users.Add(user);
+            dbContext.SaveChanges();
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
