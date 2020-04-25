@@ -9,6 +9,64 @@
 </div>
 <!-- <div class="center"> -->
 <div class="container">
+
+    @using (Html.BeginForm("SignUp", "Home", FormMethod.Post))
+    {
+        
+            <div class="row">
+                <div class="col-25">
+                    <label for="firstname">First Name</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="firstname" name="firstname" placeholder="Your first name">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="lastname">Last Name</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="lastname" name="lastname" placeholder="Your last name">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="email">Email</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="email" name="email" placeholder="Your email address">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="organization">Organization</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="organization" name="organization" placeholder="What's the name of your organization?">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="industry">Industry</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="industry" name="industry" placeholder="What industry does your organization belong to?">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="purpose">Use Purpose</label>
+                </div>
+                <div class="col-75">
+                    <textarea id="purpose" name="purpose" placeholder="Tell us a little bit about your use for this data and any suggestions for the site" style="height:200px"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <input type="submit" value="Submit">
+            </div>
+        
+
+    }
     <form action="./thankYou.html" target="_self">
         <div class="row">
             <div class="col-25">

@@ -3,9 +3,11 @@ using ConstructionSpending.DataAccess;
 using ConstructionSpending.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
@@ -725,9 +727,25 @@ namespace ConstructionSpending.Controllers
             return View();
         }
 
+
         public IActionResult SignUp()
         {
+
             return View();
+        }
+        [HttpPost]
+        public IActionResult SignUp(User user)
+        {
+            try
+            {
+                dbContext.Users.Update(user);
+                dbContext.SaveChanges();
+                return View();
+            }
+
+            catch {
+                throw new Exception();
+            }
         }
 
         public IActionResult ThankYou()
