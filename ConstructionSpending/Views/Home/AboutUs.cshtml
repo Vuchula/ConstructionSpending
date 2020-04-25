@@ -3,13 +3,19 @@
     ViewData["Title"] = "AboutUs";
 }
 <head>
-<link rel="stylesheet" type="text/css" href="~/css/aboutus.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/aboutus.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/aboutus.css" />
+    <style>
+
+        .jumbotron {
+            padding: 0rem 0rem;
+            text-align: center;
+        }
+    </style>
 </head>
-<div style="padding-top: 50px;text-align: center;
-    background-color: black;
-    color:white;
-    border-radius: 1px;">
-    <h1>About Us</h1>
+<div class="jumbotron">
+    <h1 class="display-4">About Us</h1>
+    <p class="lead"></p>
 </div>
 <div class="row">
     <div class="column">
@@ -22,7 +28,7 @@
                 <!-- <p class="title">CEO & Founder</p> -->
                 <p>Business Analytics and Information Systems M.S. student at the University of South Florida. His domain experience in the Steel industry, and the housing needs he saw while working as a community organizer in Tampa helped inspire the use case for this site. His main contribution to this website consists in organizing and setting up the layout of the site.</p>
                 <p><a href="https://github.com/jvac06">GitHub - jvac06</a></p>
-                <p><a href="mailto:jesid@mail.usf.edu" class="button">Contact</a></p>
+                <p><a href="mailto:jesid@usf.edu" class="button">Contact</a></p>
             </div>
         </div>
     </div>
@@ -61,7 +67,7 @@
 <div>
     <div class="card">
         <h2 style="text-align: center;">Data Model</h2>
-        <img src="~/img/DIS_3.jpg" alt="John" style="width:100%">
+        <img src="~/img/ERDHomeData.png" alt="ERD" style="width:100%">
         <div class="container">
             <!-- <p class="title">Designer</p> -->
             <!-- <p>Business Analytics and Information System.<br>Tampa's Smart city project inititated the curiosity to learn Construction spending<br>Worked on Data Modeling and Selection along with ideas to structure data flow in the website for users<br><a href="https://github.com/ritik777">Github</a></p>
@@ -70,4 +76,18 @@
         </div>
     </div>
 </div>
-
+<div>
+    <h3>Behind the Curtain</h3>
+    <p>
+        To make this site as useful as possible we merged data from two Application Program Interfaces (APIs) Spending & Housing Ownerhsip and Vacancy Data. When doing this we imported
+        the data into a functional database. A lot of time was spent in categorizing, cataloging U.S. Census definitions and using LINQ & Entity Frameworks functions to organize the data. 
+        This allows us to ensure that we provide reliable information to our users. In the future this will allow us to expand capabilities to our site
+        with out much hassle. Here are some ways we've categorized our data:
+        <ul>
+            <li><b>Types:</b> Organized data by types like public, private construction; rental, owner home occupancy, etc </li>
+            <li><b>Units of Measure:</b> Categorized data by three different units of measure percent, thousands, millions </li>
+            <li><b>Market Types:</b> Vancancy data had status information like whether this unit was available for sale rent or reasons if held off-market</li>
+            <li><b>Seasonally Adjusted:</b> Whether a data point was seasonally adjusted or not</li>
+        </ul>
+    </p>
+</div>
