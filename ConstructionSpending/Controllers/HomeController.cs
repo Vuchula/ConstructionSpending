@@ -738,7 +738,11 @@ namespace ConstructionSpending.Controllers
         {
             try
             {
-                dbContext.Users.Update(user);
+
+                //user.UserID = 1;
+                
+
+                dbContext.Users.Add(user);
                 dbContext.SaveChanges();
                 return View();
             }
