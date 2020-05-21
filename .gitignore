@@ -341,3 +341,6 @@ healthchecksdb
 
 # Not including reference files
 reference
+
+#MacOS file system
+.DS_Store

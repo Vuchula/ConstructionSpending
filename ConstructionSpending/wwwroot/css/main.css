@@ -13,7 +13,7 @@ body{
 }
 /* header & overall descriptions*/
 div.center{
-  text-align: center;
+  text-align: justify;
   background-color: black;
   color:white;
   padding:0.005%;

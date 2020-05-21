@@ -3,6 +3,12 @@
     ViewData["Title"] = "Reports";
 }
 <head>
+    <style>
+        .jumbotron {
+            padding: 0rem 0rem;
+            text-align: center;
+        }
+    </style>
     <!--<link rel="stylesheet" type="text/css" href="~/css/reports.css">-->
 </head>
 <!--<div style="padding-top: 50px;text-align: center;
@@ -13,8 +19,12 @@
 </div>
 <img>-->
 <div class="jumbotron">
-    <h1 class="display-4">Hello, world!</h1>
-    <p class="lead">What the fuck do I put here?</p>
+    <h1 class="display-4">Residential Numbers per Year</h1>
+    <p class="lead">
+        We know it is important to be able to analyze the detail changes in the numbers per year.
+        In this page you are able to select the year that you are interested in reviewing and save that year for comparison. This will allow you to bring
+        this year over to the <a asp-controller="Home" asp-action="SaveThis">Comparison</a> tab along with any additonal years you wish to see.
+    </p>
 </div>
 <div class="container">
     <div class="row">
@@ -22,7 +32,6 @@
             <form asp-controller="Home" asp-action="Reports" method="get" class="form-inline" role="form">
                 <div class="form-group">
                     <select class="form-control" name="year">
-                        <option>Year</option>
                         @foreach (var year in Model.Year)
                         {
                             <option value=@year>@year</option>
@@ -47,52 +56,60 @@
         </div>
     </div>
 </div>
-    <hr>
+<hr>
 
-    @if (Model.report.spendingQ != null)
-    {
+@if (Model.report.spendingQ != null)
+{
 
-        <div class="content">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Quarter</th>
-                        <th scope="col">Spending(in millions of dollars)</th>
-                        <th scope="col">Vacancy(in 1000's of units)</th>
-                        <th scope="col">Occupancy(in 1000's of units)</th>
-                        <th scope="col">Total Units</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">Q1</th>
-                        <td>$@Model.report.spendingQ.Q1</td>
-                        <td>@Model.report.vaccancyQ.Q1</td>
-                        <td>@Model.report.occupancyQ.Q1</td>
-                        <td>@Model.report.totalUnitsQ.Q1</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Q2</th>
-                        <td>$@Model.report.spendingQ.Q2</td>
-                        <td>@Model.report.vaccancyQ.Q2</td>
-                        <td>@Model.report.occupancyQ.Q2</td>
-                        <td>@Model.report.totalUnitsQ.Q2</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Q3</th>
-                        <td>$@Model.report.spendingQ.Q3</td>
-                        <td>@Model.report.vaccancyQ.Q3</td>
-                        <td>@Model.report.occupancyQ.Q3</td>
-                        <td>@Model.report.totalUnitsQ.Q3</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Q4</th>
-                        <td>$@Model.report.spendingQ.Q4</td>
-                        <td>@Model.report.vaccancyQ.Q4</td>
-                        <td>@Model.report.occupancyQ.Q4</td>
-                        <td>@Model.report.totalUnitsQ.Q4</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    }
+    <div class="content">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Quarter</th>
+                    <th scope="col">Spending (Million of dollars)</th>
+                    <th scope="col">Vacancy (1000's of units)</th>
+                    <th scope="col">Occupancy (1000's of units)</th>
+                    <th scope="col">Total Units (1000's of units)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Q1</th>
+                    <td>$@Model.report.spendingQ.Q1</td>
+                    <td>@Model.report.vaccancyQ.Q1</td>
+                    <td>@Model.report.occupancyQ.Q1</td>
+                    <td>@Model.report.totalUnitsQ.Q1</td>
+                </tr>
+                <tr>
+                    <th scope="row">Q2</th>
+                    <td>$@Model.report.spendingQ.Q2</td>
+                    <td>@Model.report.vaccancyQ.Q2</td>
+                    <td>@Model.report.occupancyQ.Q2</td>
+                    <td>@Model.report.totalUnitsQ.Q2</td>
+                </tr>
+                <tr>
+                    <th scope="row">Q3</th>
+                    <td>$@Model.report.spendingQ.Q3</td>
+                    <td>@Model.report.vaccancyQ.Q3</td>
+                    <td>@Model.report.occupancyQ.Q3</td>
+                    <td>@Model.report.totalUnitsQ.Q3</td>
+                </tr>
+                <tr>
+                    <th scope="row">Q4</th>
+                    <td>$@Model.report.spendingQ.Q4</td>
+                    <td>@Model.report.vaccancyQ.Q4</td>
+                    <td>@Model.report.occupancyQ.Q4</td>
+                    <td>@Model.report.totalUnitsQ.Q4</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+<div>
+    <h3>Behind the Curtain</h3>
+    <p>
+        This page allows us to see a year's total of money spent and housing units by using the one-many (master-detail) relationship that exists
+        between the date and each one of the total values that we display in the tables above. To be able to save and compare years for later viewing, we make
+        use of CRUD database functions which allows you to create, read, update or delete a saved view.
+    </p>
+</div>

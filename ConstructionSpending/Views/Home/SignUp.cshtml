@@ -1,66 +1,98 @@
-﻿
+﻿@model User
 @{
     ViewData["Title"] = "SignUp";
 }
-<head><link rel="stylesheet" href="~/css/black.css"></head>
-<img class="main" src="~/img/bridge.jpg" alt="bridge">
-<div class="center">
-    <h2>Sign up for monthly updates</h2>
-</div>
-<!-- <div class="center"> -->
-<div class="container">
-    <form action="./thankYou.html" target="_self">
-        <div class="row">
-            <div class="col-25">
-                <label for="firstname">First Name</label>
-            </div>
-            <div class="col-75">
-                <input type="text" id="firstname" name="firstname" placeholder="Your first name">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="lastname">Last Name</label>
-            </div>
-            <div class="col-75">
-                <input type="text" id="lastname" name="lastname" placeholder="Your last name">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="email">Email</label>
-            </div>
-            <div class="col-75">
-                <input type="text" id="email" name="email" placeholder="Your email address">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="organization">Organization</label>
-            </div>
-            <div class="col-75">
-                <input type="text" id="organization" name="organization" placeholder="What's the name of your organization?">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="industry">Industry</label>
-            </div>
-            <div class="col-75">
-                <input type="text" id="industry" name="industry" placeholder="What industry does your organization belong to?">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-25">
-                <label for="purpose">Use Purpose</label>
-            </div>
-            <div class="col-75">
-                <textarea id="purpose" name="purpose" placeholder="Tell us a little bit about your use for this data and any suggestions for the site" style="height:200px"></textarea>
-            </div>
-        </div>
-        <div class="row">
-            <input type="submit" value="Submit">
-        </div>
-    </form>
-</div>
+<head>
+    <style>
+        .jumbotron {
+            padding: 0rem 0rem;
+            text-align: center;
+        }
+    </style>
+</head>
 
+<div class="container">
+    <div class="row">
+
+        <div class="col-xl-10 offset-xl-1 py-5">
+            <div class="jumbotron">
+                <h4 class="display-4"> Contact us for more updates</h4>
+            </div>
+            <form id="contact-form" asp-controller="Home" asp-action="ThankYou" method="POST" role="form">
+
+                <div class="messages"></div>
+
+                <div class="controls">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_name">First Name *</label>
+                                <input id="form_name" asp-for="FirstName" type="text" name="FirstName" class="form-control" placeholder="Please enter your first name *" required="required" data-error="First name is required.">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_lastname">Last Name *</label>
+                                <input id="form_lastname" asp-for="LastName" type="text" name="LastName" class="form-control" placeholder="Please enter your last name *" required="required" data-error="Last name is required.">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_email">Email *</label>
+                                <input id="form_email" asp-for="Email" type="email" name="Email" class="form-control" placeholder="Please enter your email *" required="required" data-error="Valid email is required.">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_industry">Industry</label>
+                                <input id="form_industry" asp-for="Industry" type="text" name="Industry" class="form-control" placeholder="Please enter your Industry">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_Organization">Organization *</label>
+                                <input id="form_email" asp-for="Organization" type="text" name="ORganization" class="form-control" placeholder="Please enter your Organization" data-error="Valid Organization is required.">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="form_message">Feedback *</label>
+                                <input id="form_message" asp-for="UsePurpose" name="UsePurpose" class="form-control" placeholder="Tell us how we can improve *" rows="4" required="required" data-error="Please, leave us a message."></input>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="submit" class="btn btn-success btn-send" value="Send message">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="text-muted">
+                                <strong>*</strong> These fields are required.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+        <!-- /.8 -->
+
+    </div>
+    <!-- /.row-->
+</div>
+    </div>
+<!-- /.container-->
