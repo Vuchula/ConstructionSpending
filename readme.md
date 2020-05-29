@@ -14,5 +14,5 @@ Some of the techonologies used in building this site:
 - MVC Framework
 - Entity Frameworks: Code First 
 - LINQ Queries
-- Plotly Charts
+- Plotly Chart
 - Azure App Service Deploymnet
